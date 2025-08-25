@@ -1,0 +1,3728 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Nurvle</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-dark.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/languages/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/languages/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/languages/html.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/languages/css.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/languages/cpp.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/languages/java.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/languages/json.min.js"></script>
+    <!-- Include the Appwrite SDK -->
+<script src="https://cdn.jsdelivr.net/npm/appwrite@11.0.0"></script>
+    <style>
+@import url('https://fonts.googleapis.com/css2?family=Audiowide&display=swap');
+:root{
+    --body-color: #FFFFFF;
+    --basic-color: white;
+    --basic-reverse-color: black;
+    --user-msg: #F1F1F1;
+    --chatinputareabg: #fff;
+    --chatinputareabrd: #ccc;
+    --codecontainer: #282c34;
+    --codecontainercolor: #F6F6F6;
+    --codeheaderbg: rgba(0, 0, 0, 0.2);
+    --codeheadercolor: #aaa;
+    --plus-btn-bg: #FFFFFF0D;
+    --svgcolor: black;
+    --svgborder: #FFFFFF33;
+    --sidebarbg: #f1f1f1;
+    --conversation-item-bg: #fff;
+    --border-right-color: #FFFFFF24;
+    --conversation-itemactive-background-color: #7777773B;
+    --sidebarborderright: #FFFFFF00;
+    --chatareabtn: #3F3E3E59;
+    --chatinputareabtnbg: #00000005;
+    --conversation-item-border: #ddd;
+    --inputPlaceHolder: #666;
+    --homeGreetingBorder: #51525726;
+    --response-color: #000000;
+    --custom_modal_content: white;
+    --custom_modal_color: gray;
+}
+body.dark-theme{
+    --body-color: black;
+    --basic-color: black;
+    --basic-reverse-color: white;
+    --user-msg: #FFFFFF2B;
+    --chatinputareabg: #FFFFFF17;
+    --chatinputareabrd: #FFFFFF24;
+    --codecontainer: #282c34;
+    --codecontainercolor: #F6F6F6;
+    --codeheaderbg: rgba(0, 0, 0, 0.2);
+    --codeheadercolor: #aaa;
+    --plus-btn-bg: #FFFFFF0D;
+    --svgcolor: #ccc;
+    --conversation-itemactive-background-color: #E0E0E04A;
+    --sidebarborderright: #FFFFFF24;
+    --chatareabtn: #FFFFFF33;
+    --chatinputareabtnbg: #FFFFFF0D;
+    --sidebarbg: black;
+    --conversation-item-bg: #FFFFFF17;
+    --conversation-item-border: #FFFFFF24;
+    --inputPlaceHolder: #ddd;
+    --homeGreetingBorder: #FFFFFF1A;
+    --response-color: #FFFFFFCF;
+    --custom_modal_content: #343333;
+    --custom_modal_color: whitesmoke;
+}
+.title, .home-greeting h2, .home-greeting img, .home-greeting p, #userInput::placeholder {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+::selection {
+    background: #C0B531;
+    color: white;
+}
+::-moz-selection {
+    background: #C0B531;
+    color: white;
+}
+.code-container ::selection {
+    background: #C0B531;
+    color: white;
+}
+.code-container ::-moz-selection {
+    background: #C0B531;
+    color: white;
+}
+    body {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            margin: 0;
+            background: var(--body-color);
+            font-family: sans-serif;
+            transition: all 0.5s ease;
+        } .app-header {
+      display:flex; align-items:center; justify-content:space-between;
+      height:38px;
+      padding:0 16px;
+      background: var(--basic-color);
+      z-index: 99;
+      font-family: "Audiowide", sans-serif;
+      transition: all 0.5s ease;
+    } .app-header .material-symbols-rounded {
+      font-size: 28px;
+      color: #444;
+      cursor:pointer;
+      transition: all 0.5s ease;
+    }  .app-header .title {
+      font-weight:550;
+      font-size:18px;
+      color: var(--basic-reverse-color);font-family: "Audiowide", sans-serif;
+      transition: all 0.5s ease;
+    }   #response {
+    flex: 2;
+    overflow-y: auto;
+    padding: 12px;
+    background: var(--body-color);
+    color: var(--response-color);
+    transition: all 0.5s ease;
+    margin: 0 auto;
+    width: 100%;
+    max-width: 750px;
+} .chat-bubble {
+            margin: 10px 0;
+            padding: 10px 15px;
+            border-radius: 15px;
+            max-width: 80%;
+            white-space: wrap;
+        } .user-msg {
+    background-color: var(--user-msg);
+    align-self: flex-end;
+    margin-left: auto;
+    transition: all 0.5s ease;
+    max-width: 80%;
+    white-space: pre-wrap;
+    word-break: break-word;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+.user-msg::-webkit-scrollbar {
+    height: 5px;
+} .user-msg::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 5px;
+} .bot-msg {
+    background-color: transparent;
+    align-self: flex-start;
+    margin-right: auto;
+    max-width: 95%;
+    padding: 10px 0;
+    border-radius: 0;
+    margin-left: 2.5%;
+    transition: all 0.5s ease;
+}
+.user-image {
+    max-width: 100%;
+    max-height: 300px;
+    border-radius: 12px;
+    object-fit: contain;
+    margin-bottom: 8px;
+}
+#chatInputArea {
+    position: relative;
+    align-self: center;
+    justify-self: center;
+    width: 700px;
+    max-width: 90%;
+    min-height: 95px;
+    padding: 10px;
+    backdrop-filter: blur(150px);
+    background-color: var(--chatinputareabg);
+    border: 1px solid var(--chatinputareabrd);
+    border-radius: 20px;
+    bottom: 14px;
+    transition: all 0.5s ease;
+    display: flex;
+    flex-direction: column;
+}
+.input-container {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    position: relative;
+}
+#userInput {
+    width: 100%;
+    min-height: 40px;
+    max-height: 200px;
+    padding: 10px 15px;
+    padding-right: 50px;
+    border: none;
+    outline: none;
+    background: transparent;
+    color: var(--basic-reverse-color);
+    resize: none;
+    overflow-y: auto;
+    font-family: inherit;
+    font-size: inherit;
+    line-height: 1.5;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+}
+#userInput::placeholder {
+    color: var(--inputPlaceHolder);
+}
+.buttons-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    position: relative;
+    height: 33px;
+}
+#sendBtn {
+    position: absolute;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: black;
+    padding: 6px 6px;
+    border-radius: 20px;
+    border: none;
+    color: #fff;
+    outline: none;
+}
+#mic-btn svg, #camera-btn svg {
+    width: 23px;
+    height: 23px;
+}
+#userInput::placeholder {
+    color: var(--inputPlaceHolder);
+}
+#sendBtn {
+    position: absolute;
+    right: 10px;
+    bottom: px;
+    margin-left: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background:var(--basic-reverse-color);
+    padding: 6px 6px;
+    border-radius: 20px;
+    border: none;
+    fill: var(--basic-color);
+    outline: none;
+}
+        #sendBtn svg{
+            width: 24px;
+            height: 24px;
+            fill: var(--basic-color);
+        }
+.code-container code {
+    background-color: #282c34 !important;
+    color: #F6F6F6 !important;
+}
+.hljs {
+    background-color: #282c34 !important;
+    display: block;
+    overflow-x: auto;
+    padding: 0.5em;
+}
+        .code-container {
+            position: relative;
+            margin-top: 10px;
+            border-radius: 6px;
+            background-color: #282c34 !important;
+        }
+        .code-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 12px;
+            background-color: rgba(0, 0, 0, 0.2);
+            border-top-left-radius: 6px;
+            border-top-right-radius: 6px;
+            color: #aaa;
+            font-family: monospace;
+            font-size: 14px;
+        }
+.copy-btn i {
+    font-size: 12px;
+    width: 12px;
+    height: 12px;
+}
+.fa-check {
+    color: #4CAF50;
+}
+.fa-times {
+    color: #F44336;
+}	.copy-btn {
+    background: none;
+    border: none;
+    color: #aaa;
+    cursor: pointer;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+    .copy-btn:focus{
+    outline: none;
+    }
+    .copy-btn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #fff;
+        }
+.code-container pre {
+            margin: 0;
+            padding: 0px;
+            overflow-x: auto;
+            border-bottom-left-radius: 6px;
+            border-bottom-right-radius: 6px;
+            background-color: transparent !important;
+        }
+        #menu-btn{
+           transition: all 0.5s ease;
+        }
+#camera-btn {
+     position: absolute;
+     bottom: -2px;
+     left: 76px; /* Position between mic and plus */
+  background: var(--chatinputareabtnbg);
+  fill: var(--svgcolor);
+  border: 1px solid var(--chatareabtn);
+  font-size: 20px;
+  border-radius: 50px;
+  cursor: pointer;
+  padding: 2px 6px;
+  transition: all 0.2s ease;
+  align-items: center;
+  justify-content: center;
+}
+#camera-btn:active{
+    background: var(--basic-reverse-color);
+    fill: var(--basic-color);
+    scale: 1;
+}
+#camera-btn:focus{
+    outline: none;
+}
+#camera-btn svg{
+    width: 23px;
+    height: 23px;
+}
+#mic-btn {
+     position: absolute;
+     bottom: -2px;
+     left: 28px;
+     margin-left: 5px;
+  background: var(--chatinputareabtnbg);
+  fill: var(--svgcolor);
+  border: 1px solid var(--chatareabtn);
+  font-size: 20px;
+  border-radius: 50px;
+  cursor: pointer;
+  padding: 2px 6px;
+  transition: all 0.2s ease;
+  align-items: center;
+  justify-content: center;
+}
+#mic-btn:active{
+    background: var(--basic-reverse-color);
+    fill: var(--basic-color);
+}
+#mic-btn:focus{
+    outline: none;
+}
+#mic-btn svg{
+    width: 23px;
+    height: 23px;
+}
+#mic-btn.recording {
+  background: black;
+  fill: white;
+  animation: pulse 1.5s infinite;
+}
+@keyframes pulse {
+  0% { transform: scale(1); border: 2px solid #00FAFF;fill: #00FAFF;}
+  50% { transform: scale(1.02);border: 2px solid #00CAFF;fill:#00CAFF;}
+  100% { transform: scale(1); border: 2px solid #00FF08;fill: #00FF08}
+}
+#userInput {
+  flex: 1;
+  padding: 5px;
+  padding-left: 5px;
+  border: none;
+  outline: none;
+  box-shadow: none;
+}
+#userInput:focus {
+  box-shadow: none;
+}
+.home-greeting { display:flex; flex-direction:column; align-items:center; justify-content:center; height:calc(100vh - 2rem); text-align:center; color:var(--basic-reverse-color); padding:20px;transition: all 0.5s; ease;background: var(--body-color); }
+.home-greeting img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    margin-bottom: 20px;
+    border: 2px solid var(--homeGreetingBorder);
+    transition: all 0.5s ease;
+}
+.home-greeting h2 { margin-bottom:10px; font-size: 27px; font-family: Arial, Helvetica, sans-serif; }
+.dark-theme .home-greeting img {
+    content: url('https://i.ibb.co/23FTF2dZ/image-6.png');
+}
+.overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 999;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s, visibility 0.3s;
+        }
+        .overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        .sidebar {
+            position: fixed;
+            left: -80vw;
+            height: 100vh;
+            width: 80vw;
+            max-width: 400px;
+            background: var(--sidebarbg);
+            transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            z-index: 1000;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+            overflow-y: auto;
+            border: 1px solid;
+            border-color: transparent;
+            border-right-color: var(--sidebarborderright);
+            scroll-behavior: smooth;
+            transition: all 0.5s ease;
+        }
+        .sidebar.open {
+            transform: translateX(80vw);
+        }
+        #conversation-list {
+            padding: 10px;
+            margin-top: -10px;
+            overflow-y: auto;
+            height: calc(100vh - 50px);
+            transition: all 0.5s ease;
+        }
+        .conversation-item {
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 5px;
+            cursor: pointer;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            background: var(--conversation-item-bg);
+            border: none;
+            transition: all 0.5s ease;
+        }
+        .conversation-item:hover {
+            position: relative;
+        }
+        .conversation-item.active {
+            background-color: var(--conversation-itemactive-background-color);
+            border-color: #aaa;
+        } .conversation-item.active .conversation-preview{
+            color: var(--basic-reverse-color);
+        }
+        .conversation-item.active {
+            color: var(--basic-reverse-color);
+        }
+        #new-chat-btn {
+            width: 40px;
+            height: 40px;
+            border: none;
+            border-radius: 5px;
+            position: absolute;
+            font-weight: bold;
+            transition: all 0.5s;
+            position: relative;
+display: flex;
+padding: 0;
+background-color: transparent;
+fill: var(--basic-reverse-color);
+right: -10px;
+top: 2px;
+color: var(--basic-reverse-color);
+align-items: center;
+justify-content: center;
+cursor: grab;
+cursor: -moz-grab;
+cursor: -webkit-grab;
+        }
+        #new-chat-btn:active {
+            background-color: #00000036;
+        }
+        #new-chat-btn:focus{
+            outline: none;
+        }
+        .conversation-title {
+            font-size: 13px;
+            font-weight: bold;
+            margin-bottom: 5px;
+            color: var(--basic-reverse-color);
+        }
+        .conversation-preview {
+            font-size: 0.8em;
+            color: #666;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .conversation-date {
+            font-size: 0.7em;
+            color: #999;
+            text-align: right;
+        }
+        .delete-conversation {
+            position: absolute;
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            padding: 5px 6px;
+            border-radius: 50%;
+            display: none;
+            top: -5px;
+            right: -5px;
+            transition: all 0.5s;
+        }
+        .delete-conversation:hover {
+            position: absolute;
+            background: #BFC1D263;
+            border: none;
+            cursor: pointer;
+            padding: 5px 6px;
+            border-radius: 50%;
+            top: -5px;
+            right: -5px;
+        }
+        .delete-conversation svg{
+            width: 24px;
+            height: 24px;
+            fill: var(--basic-reverse-color);
+            transition: 0.3s;
+        }
+        .delete-conversation svg:active{
+            fill: red;
+        }
+        .delete-conversation:focus{
+            outline: none;
+        }
+        .conversation-item:hover .delete-conversation {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            display: block;
+        }
+        .thinking-animation {
+            display: flex;
+            gap: 5px;
+            padding: 10px 15px;
+        }
+        .thinking-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--basic-reverse-color);
+            border-radius: 50%;
+            animation: thinking 1.4s infinite ease-in-out;
+        }
+        .thinking-dot:nth-child(1) {
+            animation-delay: -0.32s;
+        }
+        .thinking-dot:nth-child(2) {
+            animation-delay: -0.16s;
+        }
+        @keyframes thinking {
+            0%, 80%, 100% { transform: scale(0); }
+            40% { transform: scale(1); }
+        }
+        #sendBtn:disabled {
+    background-color: #cccccc !important;
+    cursor: not-allowed;
+}
+        #sendBtn:disabled svg {
+    color: #888888 !important;
+    fill: #888888 !important;
+}
+        #theme-button{
+            width: 40px;
+height: 40px;
+padding: 5px 5px;
+background-color: transparent;
+border: none;
+border-radius: 50%;
+cursor: pointer;
+left: 100%;
+top: 10px;
+position: sticky;
+font-weight: bold;
+transition: all 0.5s;
+fill: var(--basic-reverse-color);
+color: var(--basic-reverse-color);
+align-items: center;
+justify-content: center;
+cursor: grab;
+cursor: -moz-grab;
+cursor: -webkit-grab;
+}
+#theme-button:focus{
+    outline: none;
+}
+#theme-button svg{
+    width: 26px;
+    height: 26px;
+    transition: 0.5s;
+}
+#theme-button svg:last-child{
+    display: none;
+}
+.dark-theme #theme-button svg:first-child{
+    display: none;
+}
+.dark-theme #theme-button svg:last-child{
+    display: block;
+}
+.calendar {
+    font-family: monospace;
+    border-collapse: collapse;
+    margin: 10px 0;
+    width: 100%;
+}
+.calendar th {
+    background-color: #f1f1f1;
+    padding: 5px;
+    text-align: center;
+}
+.calendar td {
+    border: 1px solid #ddd;
+    padding: 5px;
+    text-align: center;
+}
+.calendar .today {
+    background-color: #938C3A;
+    color: white;
+    font-weight: bold;
+}
+.dark-theme .calendar th {
+    background-color: #333;
+}
+.dark-theme .calendar td {
+    border-color: #555;
+}
+.dark-theme .calendar .today {
+    background-color: #938C3A;
+}
+#imageInput, #fileInput, #audioInput {
+    display: none;
+}
+/* Add this to your CSS */
+.preview-container {
+    display: none;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 10px;
+    max-height: 150px;
+    overflow-y: auto;
+    padding: 5px;
+    border-radius: 8px;
+    background: transparent;
+}
+.preview-item {
+    position: relative;
+    width: 45px;
+    height: 50px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: var(--chatinputareabg);
+    border-radius: 5px;
+    padding: 8px;
+    transition: all 0.3s ease;
+    border: 1px solid var(--chatinputareabrd);
+}
+.preview-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+.file-icon {
+    font-size: 32px;
+    margin-bottom: 5px;
+    color: var(--basic-reverse-color);
+}
+.file-name {
+    font-size: 5px;
+    text-align: center;
+    word-break: break-all;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    color: var(--basic-reverse-color);
+    width: 100%;
+}
+.remove-file {
+    position: absolute;
+    top: -5px;
+    right: -8px;
+    background: #ff4444;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 15px;
+    height: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 0;
+    font-size: 12px;
+    font-weight: bold;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+/* File type specific colors */
+.file-type-zip { color: #F44336; }
+.file-type-pdf { color: #E91E63; }
+.file-type-doc { color: #2196F3; }
+.file-type-xls { color: #4CAF50; }
+.file-type-ppt { color: #FF9800; }
+.file-type-txt { color: #9E9E9E; }
+.file-type-audio { color: #673AB7; }
+.file-type-video { color: #3F51B5; }
+.file-type-img { color: #00BCD4; }
+.file-type-default { color: #607D8B; }
+#attachButton{
+    background: transparent;
+    border: none;
+    padding: 1px 1px;
+    position: absolute;
+    left: 1px;
+    transition: all 0.5s ease;
+}
+#attachButton:focus{
+    outline: none;
+}
+#attachButton:active{
+    scale: 0.9;
+}
+/* Add this to your CSS */
+.file-limit-popup {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #ff4444;
+    color: white;
+    padding: 10px 30px;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    animation: fadeInOut 3s forwards;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 10px;
+}
+.file-limit-popup svg {
+    width: 50px;
+    height: 50px;
+    fill: white;
+}
+@keyframes fadeInOut {
+    0% { opacity: 0; top: 10px; }
+    10% { opacity: 1; top: 20px; }
+    90% { opacity: 1; top: 20px; }
+    100% { opacity: 0; top: 10px; }
+}
+/* Add this to your CSS */
+.message-files-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+.message-images-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 8px;
+    width: 100%;
+}
+.message-images-container img {
+    max-width: 100%;
+    max-height: 200px;
+    border-radius: 8px;
+    object-fit: contain;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+.message-images-container img:hover {
+    transform: scale(1.02);
+}
+.message-file {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 10px;
+    background-color: rgba(0, 0, 0, 0.05);
+    border-radius: 12px;
+    font-size: 14px;
+    max-width: 200px;
+}
+.dark-theme .message-file {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+.message-file i {
+    font-size: 16px;
+}
+.message-files-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+.file-error {
+    color: #ff4444;
+    font-size: 14px;
+    padding: 8px;
+    background: rgba(255, 0, 0, 0.1);
+    border-radius: 8px;
+    margin: 4px 0;
+}
+.user-media {
+    max-width: 100%;
+    max-height: 200px;
+    border-radius: 8px;
+    object-fit: contain;
+    margin-bottom: 8px;
+}
+.message-files-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+.message-file {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 10px;
+    background-color: rgba(0, 0, 0, 0.05);
+    border-radius: 12px;
+    font-size: 14px;
+}
+.dark-theme .message-file {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+/* Progress Bar for Uploads */
+.progress-bar-container {
+    width: 100%;
+    height: 10px;
+    background-color: #e0e0e0;
+    border-radius: 5px;
+    margin-top: 5px;
+    overflow: hidden;
+}
+.progress-bar {
+    height: 100%;
+    background-color: #4CAF50;
+    width: 0%;
+    transition: width 0.2s ease;
+}
+/* Error message styling */
+.error-message {
+    color: #ff4444;
+    font-size: 14px;
+    padding: 8px;
+    background: rgba(255, 0, 0, 0.1);
+    border-radius: 8px;
+    margin: 4px 0;
+}
+/* --- Camera Capture Styles --- */
+/* Camera Preview Modal */
+.camera-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9); /* Darker overlay */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 2000; /* Higher than sidebar */
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.camera-viewfinder {
+    width: 100%;
+    max-width: 600px; /* Adjust as needed */
+    height: 70vh; /* Adjust height */
+    background-color: #000;
+    border: 2px solid #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    position: relative;
+}
+
+.camera-viewfinder video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Cover the area, might crop */
+}
+
+.camera-controls {
+    margin-top: 20px;
+    display: flex;
+    gap: 20px;
+}
+
+.camera-btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 30px;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: background-color 0.3s ease;
+}
+
+.camera-capture-btn {
+    background-color: #fff; /* White background for capture */
+    color: #000; /* Black text/icon */
+}
+
+.camera-capture-btn:hover {
+    background-color: #e0e0e0;
+}
+
+.camera-cancel-btn {
+    background-color: transparent;
+    color: #fff; /* White text/icon */
+    border: 2px solid #fff;
+}
+
+.camera-cancel-btn:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+/* Hidden by default */
+.camera-modal {
+    display: none;
+}
+
+/* Confirmation Preview */
+.confirmation-preview {
+    max-width: 100%;
+    max-height: 70vh;
+    border-radius: 10px;
+    object-fit: contain;
+}
+
+/* Spinner for capture feedback */
+.capture-spinner {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white; /* White spinner */
+    font-size: 48px; /* Larger spinner */
+    display: none; /* Hidden by default */
+}
+
+/* --- Camera Selection Button Styles --- */
+.camera-select-container {
+    margin-top: 10px;
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+}
+
+.camera-select-btn {
+    padding: 10px 15px;
+    border: 2px solid #fff;
+    border-radius: 30px;
+    background-color: transparent;
+    color: white;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.camera-select-btn:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+.camera-select-btn:focus {
+    outline: 2px solid #4CAF50; /* Or your preferred focus style */
+}
+
+/* Active state is handled dynamically by JS */
+/* --- End Camera Selection Button Styles --- */
+/* --- End Camera Capture Styles --- */
+
+.custom-modal {
+  display: none; /* hidden by default */
+  position: fixed;
+  z-index: 2000;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  background: rgba(0,0,0,0.5);
+  justify-content: center;
+  align-items: center;
+  transition: all .2s ease;
+}
+.custom-modal-content {
+  background: var(--custom_modal_content);
+  padding: 17px;
+  border-radius: 25px;
+  text-align: left;
+  border: 1px solid var(--basic-color);
+  color: var(--custom_modal_color);
+  width: 91%;
+  max-width: 400px;
+  transition: all .2s ease;
+}
+.modal-buttons {
+  display: flex;
+  justify-content: space-around;
+  transition: all .2s ease;
+}
+.delete-btn {
+  background: #FF0000BA;
+  color: white;
+  padding: 13px 40px;
+  border: none;
+  border: 1px solid #FF0000BA;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: all .2s ease;
+}
+.cancel-btn {
+  background: transparent;
+  color: var(--basic-reverse-color);
+  padding: 13px 40px;
+  border: none;
+  border: 1px solid #00000036;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: all .2s ease;
+}
+.delete-btn:active { scale: 0.99; }
+.cancel-btn:focus { outline: none; }
+.delete-btn:focus { outline: none; }
+
+/* Existing button styles ... */
+
+#search-btn {
+    position: absolute;
+    bottom: -2px;
+    left: 118px;
+    background-color: transparent;
+    fill: transparent;
+    border: 1px solid var(--chatareabtn);
+    font-size: 20px;
+    border-radius: 50px;
+    cursor: pointer;
+    padding: 2px 6px;
+    transition: all 0.2s ease;
+    align-items: center;
+    justify-content: center;
+}
+
+#search-btn:active {
+    background: var(--basic-reverse-color);
+    fill: var(--basic-color);
+}
+
+#search-btn:focus {
+    outline: none;
+}
+
+#search-btn svg {
+    width: 23px;
+    height: 23px;
+}
+#search-btn.active {
+    background: var(--basic-reverse-color) !important; /* Soft blue background */
+    fill: var(--basic-color) !important;
+}
+/* --- End of new CSS --- */
+    .company-name {
+      font-size: 1.2rem; /* Larger text for better effect */
+      font-weight: 700;
+      margin-left: -14px;
+      color: transparent;
+      background: linear-gradient(
+        90deg,
+        rgba(113, 113, 113, 0.3) 0%,           /* Start with dark (background) */
+        rgba(113, 113, 113, 0.3) 40%,          /* Hold dark */
+        rgba(255, 255, 255, 0.97) 50%,         /* Sharp white highlight (10% width) */
+        rgba(113, 113, 113, 0.3) 60%,          /* Back to dark */
+        rgba(113, 113, 113, 0.3) 100%          /* End with dark */
+      );
+      background-size: 200% 100%;              /* Double width for smooth slide */
+      -webkit-background-clip: text;
+      background-clip: text;
+      animation: slide 3s linear infinite;     /* Faster for a "glint" effect */
+    }
+    @keyframes slide {
+      0% {
+        background-position: 150% 0%;          /* Start offscreen right */
+      }
+      100% {
+        background-position: -50% 0%;         /* End offscreen left */
+      }
+    }
+/* --- Conversation Search Bar Styling --- */
+
+.sidebar-header {
+  padding: 12px 10px;
+  background-color: var(--sidebarbg);
+  border: none;
+  position: sticky;
+  top: 40px;
+  z-index: 10;
+  flex-shrink: 0;
+}
+
+/* 2. Style the search input itself */
+#conversation-search-input {
+  width: 100%; /* Take full width of the header */
+  padding: 10px 15px; /* Generous padding for touch targets */
+  font-size: 0.95rem; /* Slightly smaller font */
+  border-radius: 20px; /* Pill-shaped rounded corners */
+  border: none; /* Subtle border */
+  background-color: var(--conversation-item-bg); /* Light background */
+  color: var(--basic-reverse-color); /* Text color */
+  box-sizing: border-box; /* Include padding/border in width */
+  transition: all 0.2s ease; /* Smooth transition for focus effects */
+}
+
+/* Placeholder text styling */
+#conversation-search-input::placeholder {
+  color: var(--inputPlaceHolder); /* Use your existing placeholder color variable */
+  opacity: 1;
+}
+
+/* Focus state for better visibility */
+#conversation-search-input:focus {
+  outline: none;
+  border: none;
+}
+
+/* --- Adjust Sidebar and Conversation List Layout --- */
+
+/* Make the sidebar a flex container to manage header and list layout easily */
+/* Adjusted height calculation to account for the header */
+
+
+/* Adjust the conversation list area */
+#conversation-list {
+  /* ... your existing list styles ... */
+  /* Allow it to grow and take remaining space 
+  flex-grow: 1;        /* Add this */
+  /* Enable scrolling for the list items only 
+  overflow-y: auto;    /* Add this */
+  /* Remove fixed height calc if using flex 
+  height: auto;        /* Override if you had a calc() height */
+  /* Adjust padding/margin if needed now that header provides spacing 
+  padding: 10px;       /* Keep your padding 
+  margin-top: 0;       /* Remove top margin if header provides space */
+}
+
+/* Optional: Adjust #new-chat-btn if needed */
+/* Its absolute positioning might need tweaks depending on the new layout */
+#new-chat-btn {
+   /* Example: Keep it absolutely positioned relative to the sidebar */
+   /* top: 15px; */ /* Adjust based on header height and padding */
+   /* right: 15px; */
+   /* z-index: 11; */ /* Above header */
+   /* ... rest of existing styles ... */
+   /* If issues arise, consider placing it inside .sidebar-header in HTML */
+}
+
+/* --- End of Conversation Search Bar Styling --- */
+</style>
+</head>
+<body>
+        <div class="overlay"></div>
+    <div class="swipe-indicator"></div>
+    <div class="sidebar">
+       <button class='change-theme' id="theme-button">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"><path d="M480-120q-150 0-255-105T120-480q0-150 105-255t255-105q14 0 27.5 1t26.5 3q-41 29-65.5 75.5T444-660q0 90 63 153t153 63q55 0 101-24.5t75-65.5q2 13 3 26.5t1 27.5q0 150-105 255T480-120Zm0-80q88 0 158-48.5T740-375q-20 5-40 8t-40 3q-123 0-209.5-86.5T364-660q0-20 3-40t8-40q-78 32-126.5 102T200-480q0 116 82 198t198 82Zm-10-270Z"/></svg>
+ <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" ><path d="M480-360q50 0 85-35t35-85q0-50-35-85t-85-35q-50 0-85 35t-35 85q0 50 35 85t85 35Zm0 80q-83 0-141.5-58.5T280-480q0-83 58.5-141.5T480-680q83 0 141.5 58.5T680-480q0 83-58.5 141.5T480-280ZM200-440H40v-80h160v80Zm720 0H760v-80h160v80ZM440-760v-160h80v160h-80Zm0 720v-160h80v160h-80ZM256-650l-101-97 57-59 96 100-52 56Zm492 496-97-101 53-55 101 97-57 59Zm-98-550 97-101 59 57-100 96-56-52ZM154-212l101-97 55 53-97 101-59-57Zm326-268Z"/></svg>
+</button>
+          <div id="conversation-list"></div>
+        <div class="drag-handle"></div>
+    </div>
+        <div class="app-header">
+      <span class="material-symbols-rounded" id="menu-btn"><svg viewBox="0 0 24 24" width="26px" height="26px" xmlns="http://www.w3.org/2000/svg">
+<path d="M4 18H10" stroke="var(--basic-reverse-color)" stroke-width="2" stroke-linecap="round"/>
+<path d="M4 12L16 12" stroke="var(--basic-reverse-color)" stroke-width="2" stroke-linecap="round"/>
+<path d="M4 6L20 6" stroke="var(--basic-reverse-color)" stroke-width="2" stroke-linecap="round"/>
+</svg></span>
+      <div class="title">NURVLE</div>
+      
+      
+                <button id="new-chat-btn">
+<svg width="25px" height="25px" viewBox="0 0 24 24" id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg"><defs><style>.cls-1 {fill: none;stroke: var(--basic-reverse-color); stroke-miterlimit: 10;stroke-width: 1.9px;}</style></defs><path class="cls-1" d="M2.5,12A9.5,9.5,0,1,1,12,21.5H2.5l2.66-2.92A9.43,9.43,0,0,1,2.5,12Z" />
+    <line class="cls-1" x1="8.2" y1="12" x2="15.8" y2="12" />
+    <line class="cls-1" x1="12" y1="8.2" x2="12" y2="15.8" />
+</svg></button>
+
+    </div>
+    <div id="response" class="d-flex flex-column">
+            <div class="home-greeting" id="homeGreeting">
+     <img src="https://i.ibb.co/m35mFtZ/image-4.png" alt="Bot Logo">
+        <h2>Hello there!</h2>
+        <p>How can I help you today?</p>
+    </div>
+    </div>
+<div id="chatInputArea">
+    <div class="input-container">
+<div class="preview-container" id="previewContainer"></div>
+        <textarea id="userInput" placeholder="Type a message..." rows="1"></textarea>
+        <input type="file" id="fileInput" accept="image/*,audio/*,.pdf,.txt,.html,.css,.js,.py,.doc,.xls,.xlsx,.ppt,.pptx" multiple/>
+        <div class="buttons-container">
+    <button id="attachButton" title="Attach files">
+        <svg fill="var(--svgcolor)" width="26px" height="26px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 22a5.86 5.86 0 0 1-6-5.7V6.13A4.24 4.24 0 0 1 10.33 2a4.24 4.24 0 0 1 4.34 4.13v10.18a2.67 2.67 0 0 1-5.33 0V6.92a1 1 0 0 1 1-1 1 1 0 0 1 1 1v9.39a.67.67 0 0 0 1.33 0V6.13A2.25 2.25 0 0 0 10.33 4 2.25 2.25 0 0 0 8 6.13V16.3a3.86 3.86 0 0 0 4 3.7 3.86 3.86 0 0 0 4-3.7V6.13a1 1 0 1 1 2 0V16.3a5.86 5.86 0 0 1-6 5.7z"/>
+        </svg>
+    </button>
+            <button id="mic-btn" title="Voice Input">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path fill-rule="evenodd" d="M21,14 L19,14 L19,10 L21,10 L21,14 Z M17,16 L15,16 L15,8 L17,8 L17,16 Z M13,19 L11,19 L11,5 L13,5 L13,19 Z M9,16 L7,16 L7,8 L9,8 L9,16 Z M5,14 L3,14 L3,10 L5,10 L5,14 Z"/>
+                </svg>
+            </button>
+            <button id="camera-btn" title="Take Picture">
+                <svg width="26px" height="26px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="12" cy="12" r="3.2"/>
+                    <path d="M9 2 7.17 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2h-3.17L15 2H9zm3 15c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/>
+                    <path d="M0 0h24v24H0z" fill="none"/>
+                </svg>
+            </button>
+             <!-- Add this new button -->
+ <button id="search-btn" title="Web Search">
+     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor"> <!-- Simple magnifying glass icon -->
+         <path d="M15.5 14h-.79l-.28-.27A6.471 6.471 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z" />
+     </svg>
+ </button>
+            <button id="sendBtn"> <!-- Removed inline onclick -->
+<svg fill="white" width="25px" height="25px" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M5.23 10.64a1 1 0 0 0 1.41.13L11 7.14V19a1 1 0 0 0 2 0V7.14l4.36 3.63a1 1 0 1 0 1.28-1.54l-6-5-.15-.09-.13-.07a1 1 0 0 0-.72 0l-.13.07-.15.09-6 5a1 1 0 0 0-.13 1.41z"/></svg>
+    </button>
+        </div>
+    </div>
+</div>
+<svg style="display:none;" xmlns="http://www.w3.org/2000/svg">
+    <symbol id="error-icon" viewBox="0 0 24 24">
+        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+    </symbol>
+</svg>
+<!-- Custom Delete Confirmation Modal -->
+<div id="deleteModal" class="custom-modal">
+    <div class="custom-modal-content">
+        <p style="color: #FF0000BA; text-align: center;font-size: 20px;font-weight: 500;">Delete Chat</p>
+        <p>This action will permanently delete all the chats you've created and cannot be undone. Please confirm to proceed.</p>
+        <div class="modal-buttons">
+            <button id="cancelDeleteBtn" class="cancel-btn">Cancel</button>
+            <button id="confirmDeleteBtn" class="delete-btn">Delete</button>
+        </div>
+    </div>
+</div>
+    <script>
+    
+    
+async function loadConfig() {
+  const resp = await fetch("/.netlify/functions/config");
+  const config = await resp.json();
+  
+  const API_KEY = config.API_KEY;
+  let currentModel = config.currentModel;
+
+  console.log("Loaded:", API_KEY, currentModel);
+
+  // You can now use API_KEY + MODEL anywhere in your app
+}
+loadConfig();
+
+const SERPAPI_KEY = 'a485ed54bac3e5eae9aab0253ae45fe13218b976f9c25786b07a7ef89e8176e5'; // <-- Replace with your SerpAPI key
+// - Appwrite Configuration -
+// IMPORTANT: Remove the trailing space from the endpoint URL if it exists
+const APPWRITE_ENDPOINT = "https://fra.cloud.appwrite.io/v1"; // <-- REPLACE WITH YOUR ENDPOINT
+const APPWRITE_PROJECT_ID = "nurvle-project-id-here"; // <-- REPLACE WITH YOUR PROJECT ID
+const APPWRITE_BUCKET_ID = "nurvle-bucket-id-here"; // <-- REPLACE WITH YOUR BUCKET ID
+const APPWRITE_DATABASE_ID = "nurvle-database-id-here";
+const APPWRITE_COLLECTION_ID = "nurvle-collection-id-here";
+
+// Initialize Appwrite Client
+const client = new Appwrite.Client();
+client.setEndpoint(APPWRITE_ENDPOINT).setProject(APPWRITE_PROJECT_ID);
+
+// Initialize Appwrite Account, Storage, and Databases
+const account = new Appwrite.Account(client); // Add Account for authentication
+const storage = new Appwrite.Storage(client);
+const databases = new Appwrite.Databases(client);
+let conversations = []; // Start with an empty array, load from Appwrite
+let currentConversationId = null;
+let selectedFiles = []; // Stores {file: File, id: string, name: string, type: string, size: number, fileId: string} objects
+let currentMessages = [];
+let isOpen = false;
+let currentUserId = null; // Variable to store the current user's ID
+let userIsScrolling = false;
+let autoScrollEnabled = true;
+
+// --- New Function: Handle Anonymous Login ---
+async function handleAnonymousLogin() {
+    try {
+        // Check if there's already a session (user might have refreshed the page)
+        const session = await account.get(); // This will throw if no session
+        console.log("Existing session found:", session);
+        currentUserId = session.$id; // Or session.userId depending on SDK version
+        return session;
+    } catch (error) {
+        console.log("No existing session, creating anonymous user...");
+        // No session found, create an anonymous account
+        try {
+            const anonymousUser = await account.createAnonymousSession();
+            console.log("Anonymous user created/logged in:", anonymousUser);
+            currentUserId = anonymousUser.$id; // Or anonymousUser.userId
+            return anonymousUser;
+        } catch (loginError) {
+            console.error("Error creating anonymous session:", loginError);
+            appendMessage(`Error initializing user session: ${loginError.message}`, 'bot-msg error-message');
+            throw loginError; // Re-throw to prevent app from starting incorrectly
+        }
+    }
+}
+
+
+
+
+//const API_KEY = 'AIzaSyB_s-KicZoL9Z-3YT9Wr7PfsUU8inKGYSI';
+//const API_KEY = 'AIzaSyDSIbWw73tIqNFS1c1mQEoiwgRaAlHaoA0'; // <-- Ensure this is valid
+//let currentModel = 'gemini-1.5-flash';
+let isThinking = false;
+let isSearching = false; // New flag for search state
+
+// --- Camera Capture Logic Variables ---
+let cameraStream = null;
+let capturedBlob = null; // Store the captured image blob
+let cameraModal = null;
+let viewfinder = null;
+let videoElement = null;
+let captureSpinner = null;
+let controls = null;
+let captureBtn = null;
+let cancelBtn = null;
+// --- End Camera Capture Logic Variables ---
+
+// --- Helper Functions ---
+// Uploads a file to Appwrite Storage and returns the file ID
+async function uploadFileToAppwrite(file) {
+    try {
+        const response = await storage.createFile(
+            APPWRITE_BUCKET_ID,
+            'unique()', // Let Appwrite generate the ID
+            file
+        );
+        console.log("File uploaded successfully:", response);
+        return response.$id; // Return the Appwrite file ID
+    } catch (error) {
+        console.error("Error uploading file to Appwrite:", error);
+        throw new Error(`Failed to upload file: ${error.message}`);
+    }
+}
+// Gets the public URL for an Appwrite file ID (for display)
+function getAppwriteFileUrl(fileId) {
+    try {
+        // Use getFileView for display URLs
+        const url = storage.getFileView(APPWRITE_BUCKET_ID, fileId);
+        return url; // This is a URL object
+    } catch (error) {
+        console.error("Error getting Appwrite file URL:", error);
+        return null; // Or handle error appropriately
+    }
+}
+// Converts a File object to Base64 string
+function fileToBase64(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = () => {
+            // Remove the data URL prefix (e.g., "data:image/png;base64,")
+            const base64Data = reader.result.split(',')[1];
+            resolve(base64Data);
+        };
+        reader.onerror = error => reject(error);
+        reader.readAsDataURL(file);
+    });
+}
+// --- Modified saveConversationToAppwrite to include userId ---
+async function saveConversationToAppwrite(conversationData) {
+    if (!currentUserId) {
+        console.error("Cannot save conversation: User ID not set.");
+        appendMessage(`Error saving conversation: User not authenticated.`, 'bot-msg error-message');
+        return;
+    }
+    
+    // Ensure the conversation data includes the userId
+    const dataToSave = {
+        ...conversationData,
+        userId: currentUserId // Add userId to the data being saved
+    };
+    
+    try {
+        if (dataToSave.$id) {
+            // Update existing document
+            // Make sure the userId matches (security check, though UI should prevent editing others' convos)
+            // You might want to add a query check here if paranoia is high
+            await databases.updateDocument(
+                APPWRITE_DATABASE_ID,
+                APPWRITE_COLLECTION_ID,
+                dataToSave.$id,
+                dataToSave // Include userId in update
+            );
+            console.log("Conversation updated in Appwrite DB:", dataToSave.$id);
+        } else {
+            // Create new document
+            const response = await databases.createDocument(
+                APPWRITE_DATABASE_ID,
+                APPWRITE_COLLECTION_ID,
+                'unique()', // Let Appwrite generate the ID
+                dataToSave // Include userId in creation
+            );
+            console.log("Conversation created in Appwrite DB:", response.$id);
+            // Update the local conversation ID with the one from Appwrite
+            conversationData.$id = response.$id;
+        }
+    } catch (error) {
+        console.error("Error saving conversation to Appwrite DB:", error);
+        appendMessage(`Error saving conversation: ${error.message}`, 'bot-msg error-message');
+    }
+}
+
+// --- Modified loadConversationsFromAppwrite to filter by user ---
+// Loads all conversations for the current user from Appwrite Database
+async function loadConversationsFromAppwrite() {
+    if (!currentUserId) {
+        console.warn("Cannot load conversations: User ID not set.");
+        return; // Or handle appropriately
+    }
+    
+    try {
+        // Add a query to filter documents by the current user's ID
+        // Assumes your Appwrite collection has a field named 'userId'
+        const response = await databases.listDocuments(
+            APPWRITE_DATABASE_ID,
+            APPWRITE_COLLECTION_ID,
+            [
+                Appwrite.Query.equal('userId', currentUserId), // Filter by userId
+                Appwrite.Query.orderDesc('$createdAt') // Keep sorting
+            ]
+        );
+        
+        conversations = response.documents.map(doc => {
+            // Ensure messages are parsed correctly if stored as JSON string
+            let messages = doc.messages || [];
+            if (typeof messages === 'string') {
+                try {
+                    messages = JSON.parse(messages);
+                } catch (e) {
+                    console.error("Error parsing messages for conversation:", doc.$id, e);
+                    messages = [];
+                }
+            }
+            return {
+                id: doc.conversationId, // Use the conversationId stored in the document
+                title: doc.title,
+                preview: doc.preview,
+                messages: messages,
+                timestamp: doc.timestamp,
+                $id: doc.$id // Store the Appwrite document ID
+                // userId: doc.userId // Optional: store userId if needed locally
+            };
+        });
+        console.log("Conversations loaded from Appwrite DB for user:", currentUserId);
+        renderConversationList(); // Update UI after loading
+    } catch (error) {
+        console.error("Error loading conversations from Appwrite DB:", error);
+        appendMessage(`Error loading conversations: ${error.message}`, 'bot-msg error-message');
+    }
+}
+
+
+document.addEventListener('DOMContentLoaded', async function() {
+    hljs.highlightAll();
+    
+    console.log("🚀 App initialization starting...");
+    
+    try {
+        console.log("Step 1: Trying anonymous login...");
+        await handleAnonymousLogin();
+        console.log("✅ Anonymous login success. Current User ID:", currentUserId);
+        
+        console.log("Step 2: Loading conversations...");
+        await loadConversationsFromAppwrite();
+        console.log("✅ Conversations loaded:", conversations.length);
+        
+        console.log("Step 3: Rendering conversation list...");
+        renderConversationList();
+        console.log("✅ Conversation list rendered.");
+        
+        console.log("Step 4: Setting up UI...");
+        document.getElementById('new-chat-btn').addEventListener('click', startNewConversation);
+        startNewConversation();
+        setupEventListeners();
+        initializeCameraUI();
+        initializeUI();
+        console.log("✅ UI setup complete.");
+        
+    } catch (initError) {
+        console.error("❌ Critical error during app initialization:", initError);
+        document.getElementById('response').innerHTML =
+            `<div class="error-message">
+                Failed to initialize the application.<br>
+                Error: ${initError.message}<br>
+                <small>Check console for detailed logs.</small>
+            </div>`;
+    }
+});
+
+function setupEventListeners() {
+    const userInput = document.getElementById('userInput');
+    if (userInput) {
+        userInput.addEventListener('input', function() {
+            this.style.height = 'auto';
+            this.style.height = (this.scrollHeight) + 'px';
+            document.getElementById('sendBtn').disabled = this.value.trim() === '' && selectedFiles.length === 0;
+        });
+    }
+    // Add paste event listener to user input
+if (userInput) {
+    userInput.addEventListener('paste', handlePasteEvent);
+}
+    const attachButton = document.getElementById('attachButton');
+    if (attachButton) {
+        attachButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            document.getElementById('fileInput').click();
+        });
+    }
+    const fileInput = document.getElementById('fileInput');
+    if (fileInput) {
+        fileInput.addEventListener('change', handleFileSelect);
+    }
+    const sendButton = document.getElementById('sendBtn');
+    if (sendButton) {
+        sendButton.addEventListener('click', sendMessage); // Add event listener here
+    }
+    // --- Camera Button Event Listener ---
+    const cameraBtn = document.getElementById('camera-btn');
+    if (cameraBtn) {
+        cameraBtn.addEventListener('click', openCamera);
+    }
+    // --- End Camera Button Event Listener ---
+}
+// Add this function to show popup notifications
+function showFileLimitPopup(message) {
+    const popup = document.createElement('div');
+    popup.className = 'file-limit-popup';
+    popup.innerHTML = `
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/>
+        </svg>
+        <span>${message}</span>
+    `;
+    document.body.appendChild(popup);
+    // Remove after animation completes
+    setTimeout(() => {
+        popup.remove();
+    }, 3000);
+}
+function handleFileSelect(e) {
+    const MAX_FILES = 5;
+    const MAX_SIZE_MB = 4;
+    const MAX_SIZE_BYTES = MAX_SIZE_MB * 1024 * 1024;
+    const files = Array.from(e.target.files);
+    // Check total files won't exceed limit
+    if (selectedFiles.length + files.length > MAX_FILES) {
+        showFileLimitPopup(`Maximum ${MAX_FILES} files allowed per message`);
+        e.target.value = '';
+        return;
+    }
+    files.forEach(file => {
+        // Check file size
+        if (file.size > MAX_SIZE_BYTES) {
+            showFileLimitPopup(`File "${file.name}" exceeds ${MAX_SIZE_MB}MB limit`);
+            return;
+        }
+        // Check if file already exists (by name and size)
+        if (!selectedFiles.some(f => f.name === file.name && f.size === file.size)) {
+            // Store file object locally for upload later, along with metadata
+            selectedFiles.push({
+                file: file, // The actual File object
+                id: `temp_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`, // Temporary ID for UI
+                name: file.name,
+                type: file.type,
+                size: file.size,
+                fileId: null // Will be populated after successful upload
+            });
+        }
+    });
+    updatePreview();
+    e.target.value = '';
+    document.getElementById('sendBtn').disabled =
+        document.getElementById('userInput').value.trim() === '' &&
+        selectedFiles.length === 0;
+}
+function updatePreview() {
+    const previewContainer = document.getElementById('previewContainer');
+    previewContainer.innerHTML = '';
+    if (selectedFiles.length === 0) {
+        previewContainer.style.display = 'none';
+        return;
+    }
+    previewContainer.style.display = 'flex';
+    selectedFiles.forEach((fileInfo, index) => { // fileInfo is the object {file, id, name, type, size, fileId}
+        const previewItem = document.createElement('div');
+        previewItem.className = 'preview-item';
+        previewItem.dataset.fileId = fileInfo.id; // Use the temp ID for UI identification
+        const removeBtn = document.createElement('button');
+        removeBtn.className = 'remove-file';
+        removeBtn.innerHTML = '×';
+        removeBtn.onclick = (e) => {
+            e.stopPropagation();
+            removeFile(index);
+        };
+        // Determine file type and icon
+        const fileType = getFileType(fileInfo); // Pass the fileInfo object
+        const fileIcon = document.createElement('div');
+        fileIcon.className = `file-icon ${fileType.class}`;
+        fileIcon.innerHTML = fileType.icon;
+        const fileName = document.createElement('div');
+        fileName.className = 'file-name';
+        fileName.textContent = fileInfo.name.length > 20 ?
+            fileInfo.name.substring(0, 17) + '...' :
+            fileInfo.name;
+        // Add progress bar container
+        const progressBarContainer = document.createElement('div');
+        progressBarContainer.className = 'progress-bar-container';
+        progressBarContainer.style.display = 'none'; // Hidden by default
+        const progressBar = document.createElement('div');
+        progressBar.className = 'progress-bar';
+        progressBar.style.width = '0%';
+        progressBarContainer.appendChild(progressBar);
+        previewItem.appendChild(fileIcon);
+        previewItem.appendChild(fileName);
+        previewItem.appendChild(removeBtn);
+        previewItem.appendChild(progressBarContainer); // Add progress bar to preview item
+        // Add click to view for images (if already uploaded)
+        if (fileInfo.type.match('image.*')) {
+            fileIcon.className = 'file-icon';
+            fileIcon.innerHTML = '<i class="fas fa-file-image"></i>'; // Image icon
+            if (fileInfo.file) {
+    previewItem.style.cursor = 'pointer'; // Indicate it's clickable
+    previewItem.onclick = () => {
+        try {
+            // Create a local object URL for the File
+            const localUrl = URL.createObjectURL(fileInfo.file);
+            // Call the existing viewImageFromUrl function
+            // Pass an object with an href property, similar to getAppwriteFileUrl
+            viewImageFromUrl({ href: localUrl });
+            // Optional: Revoke the URL after a delay or when the overlay is closed
+            // A more robust way would be to revoke it when the overlay's 'load' event fires on the image inside viewImageFromUrl
+            // For simplicity, we'll revoke it after a short delay assuming the image loads quickly.
+            // A better approach would be to modify viewImageFromUrl to handle local URLs or add a callback.
+            // setTimeout(() => URL.revokeObjectURL(localUrl), 10000); // Revoke after 10 seconds, adjust as needed
+            // Or revoke when the image loads inside viewImageFromUrl
+        } catch (error) {
+            console.error("Error creating local URL for preview image:", error);
+            alert("Could not preview the image.");
+        }
+    };
+} else {
+    // If for some reason the File object is missing, disable click
+    previewItem.style.cursor = 'default';
+    previewItem.onclick = null;
+}
+        }
+        previewContainer.appendChild(previewItem);
+    });
+}
+// Helper function to determine file type (modified to accept fileInfo object)
+function getFileType(fileInfo) {
+    const extension = fileInfo.name.split('.').pop().toLowerCase();
+    const mimeType = fileInfo.type;
+    const types = {
+        zip: {
+            icon: '<i class="fas fa-file-archive"></i>',
+            class: 'file-type-zip'
+        },
+        pdf: {
+            icon: '<i class="fas fa-file-pdf"></i>',
+            class: 'file-type-pdf'
+        },
+        doc: {
+            icon: '<i class="fas fa-file-word"></i>',
+            class: 'file-type-doc'
+        },
+        xls: {
+            icon: '<i class="fas fa-file-excel"></i>',
+            class: 'file-type-xls'
+        },
+        ppt: {
+            icon: '<i class="fas fa-file-powerpoint"></i>',
+            class: 'file-type-ppt'
+        },
+        txt: {
+            icon: '<i class="fas fa-file-alt"></i>',
+            class: 'file-type-txt'
+        },
+        audio: {
+            icon: '<i class="fas fa-file-audio"></i>',
+            class: 'file-type-audio'
+        },
+        video: {
+            icon: '<i class="fas fa-file-video"></i>',
+            class: 'file-type-video'
+        },
+        image: {
+            icon: '<i class="fas fa-file-image"></i>',
+            class: 'file-type-img'
+        },
+        default: {
+            icon: '<i class="fas fa-file"></i>',
+            class: 'file-type-default'
+        }
+    };
+    // ZIP file detection
+    if (['zip', 'rar', '7z', 'tar', 'gz'].includes(extension) ||
+        mimeType.includes('application/zip') ||
+        mimeType.includes('application/x-zip-compressed')) {
+        return types.zip;
+    }
+    if (extension === 'pdf' || mimeType.includes('application/pdf')) {
+        return types.pdf;
+    }
+    if (['doc', 'docx'].includes(extension) ||
+        mimeType.includes('application/msword') ||
+        mimeType.includes('application/vnd.openxmlformats-officedocument.wordprocessingml.document')) {
+        return types.doc;
+    }
+    if (['xls', 'xlsx'].includes(extension) ||
+        mimeType.includes('application/vnd.ms-excel') ||
+        mimeType.includes('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')) {
+        return types.xls;
+    }
+    if (['ppt', 'pptx'].includes(extension) ||
+        mimeType.includes('application/vnd.ms-powerpoint') ||
+        mimeType.includes('application/vnd.openxmlformats-officedocument.presentationml.presentation')) {
+        return types.ppt;
+    }
+    if (extension === 'txt' || mimeType.includes('text/plain')) {
+        return types.txt;
+    }
+    if (mimeType.includes('audio/')) {
+        return types.audio;
+    }
+    if (mimeType.includes('video/')) {
+        return types.video;
+    }
+    if (mimeType.includes('image/')) {
+        return types.image;
+    }
+    return types.default;
+}
+// Function to view image from a URL
+function viewImageFromUrl(url) {
+    if (!url) return;
+    const overlay = document.createElement('div');
+    overlay.style.position = 'fixed';
+    overlay.style.top = '0';
+    overlay.style.left = '0';
+    overlay.style.width = '100%';
+    overlay.style.height = '100%';
+    overlay.style.backgroundColor = 'rgba(0,0,0,0.8)';
+    overlay.style.display = 'flex';
+    overlay.style.justifyContent = 'center';
+    overlay.style.alignItems = 'center';
+    overlay.style.zIndex = '1000';
+    overlay.style.cursor = 'pointer';
+    const img = document.createElement('img');
+    img.src = url.href; // Get the string URL from the URL object
+    img.style.maxWidth = '90%';
+    img.style.maxHeight = '90%';
+    img.style.objectFit = 'contain';
+    img.style.borderRadius = '8px';
+    overlay.appendChild(img);
+    overlay.onclick = () => overlay.remove();
+    document.body.appendChild(overlay);
+}
+function removeFile(index) {
+    selectedFiles.splice(index, 1);
+    updatePreview();
+    document.getElementById('sendBtn').disabled =
+        document.getElementById('userInput').value.trim() === '' &&
+        selectedFiles.length === 0;
+}
+// Show the standard thinking animation (used for general processing)
+function showThinkingAnimation() {
+    if (isThinking || isSearching) return; // Don't show if already showing or searching
+    isThinking = true;
+    const thinkingDiv = document.createElement('div');
+    thinkingDiv.className = 'chat-bubble bot-msg thinking-animation';
+    thinkingDiv.innerHTML = `
+        <div class="thinking-dot"></div>
+        <div class="thinking-dot"></div>
+        <div class="thinking-dot"></div>
+    `;
+    const responseDiv = document.getElementById('response');
+    if (responseDiv) {
+        responseDiv.appendChild(thinkingDiv);
+        responseDiv.scrollTop = responseDiv.scrollHeight;
+    }
+}
+// Hide the standard thinking animation
+function hideThinkingAnimation() {
+    isThinking = false;
+    const thinkingElements = document.querySelectorAll('.thinking-animation:not(.searching-animation)');
+    thinkingElements.forEach(el => el.remove());
+}
+
+
+
+// Show the custom searching animation
+function showSearchingAnimation() {
+    if (isSearching || isThinking) return; // Don't show if already showing or thinking
+    isSearching = true;
+    const searchingDiv = document.createElement('div');
+    searchingDiv.className = 'chat-bubble bot-msg thinking-animation searching-animation'; // Add specific class
+    searchingDiv.innerHTML = `
+     <div class="company-name">Searching...</div>
+        <div class="searching-spinner"></div>
+    `;
+    const responseDiv = document.getElementById('response');
+    if (responseDiv) {
+        responseDiv.appendChild(searchingDiv);
+        responseDiv.scrollTop = responseDiv.scrollHeight;
+    }
+}
+
+// Hide the custom searching animation
+function hideSearchingAnimation() {
+    isSearching = false;
+    const searchingElements = document.querySelectorAll('.searching-animation');
+    searchingElements.forEach(el => el.remove());
+}
+
+
+// Start a new conversation
+function startNewConversation() {
+    currentConversationId = Date.now().toString();
+    currentMessages = [];
+    document.getElementById('response').innerHTML = `
+        <div class="home-greeting" id="homeGreeting">
+            <img src="https://i.ibb.co/m35mFtZ/image-4.png" alt="Bot Logo">
+            <h2>Hello there!</h2>
+            <p>How can I help you today?</p>
+        </div>
+    `;
+}
+// Save conversation to Appwrite only
+async function saveConversation() {
+    if (!currentConversationId || currentMessages.length === 0) return;
+    // Process messages to handle file data
+    const processedMessages = currentMessages.map(msg => {
+        if (msg.role === 'user' && msg.files) {
+            // We store the Appwrite file IDs for uploaded files
+            const processedFiles = msg.files.map(fileInfo => ({
+                name: fileInfo.name,
+                type: fileInfo.type,
+                size: fileInfo.size,
+                fileId: fileInfo.fileId // This is the Appwrite file ID
+            }));
+            return {
+                ...msg,
+                files: processedFiles
+            };
+        }
+        return msg;
+    });
+    const conversation = {
+        id: currentConversationId,
+        title: currentMessages[0].content.substring(0, 30) +
+              (currentMessages[0].content.length > 30 ? '...' : ''),
+        preview: currentMessages.length > 1 ?
+                currentMessages[1].content.substring(0, 50) +
+                (currentMessages[1].content.length > 50 ? '...' : '') : '',
+        messages: processedMessages, // Use the processed messages
+        timestamp: Date.now(),
+    };
+    // Find the Appwrite document ID if it exists
+    const existingAppwriteDoc = conversations.find(c => c.id === currentConversationId);
+    const appwriteDocId = existingAppwriteDoc ? existingAppwriteDoc.$id : null;
+    const conversationDataForAppwrite = {
+        conversationId: currentConversationId,
+        title: conversation.title,
+        preview: conversation.preview,
+        messages: JSON.stringify(conversation.messages), // Store messages as JSON string
+        timestamp: conversation.timestamp,
+        $id: appwriteDocId // Include $id if updating
+    };
+    await saveConversationToAppwrite(conversationDataForAppwrite);
+    // Update local conversations array to reflect the saved state
+    const existingIndex = conversations.findIndex(c => c.id === currentConversationId);
+    if (existingIndex >= 0) {
+        conversations[existingIndex] = { ...conversation, $id: conversationDataForAppwrite.$id || conversations[existingIndex].$id };
+    } else {
+        conversations.unshift({ ...conversation, $id: conversationDataForAppwrite.$id });
+    }
+    renderConversationList();
+}
+let conversationToDeleteId = null;
+
+function showDeletePopup(conversationId) {
+    conversationToDeleteId = conversationId;
+    document.getElementById("deleteModal").style.display = "flex";
+}
+
+document.getElementById("cancelDeleteBtn").addEventListener("click", () => {
+    document.getElementById("deleteModal").style.display = "none";
+    conversationToDeleteId = null;
+});
+
+document.getElementById("confirmDeleteBtn").addEventListener("click", async () => {
+    if (conversationToDeleteId) {
+        // Call your existing delete logic here without confirm()
+        const conv = conversations.find(c => c.id === conversationToDeleteId);
+        if (conv && conv.$id) {
+            try {
+                await databases.deleteDocument(APPWRITE_DATABASE_ID, APPWRITE_COLLECTION_ID, conv.$id);
+                conversations = conversations.filter(c => c.id !== conversationToDeleteId);
+                renderConversationList();
+                console.log("Conversation deleted:", conversationToDeleteId);
+            } catch (error) {
+                console.error("Error deleting conversation:", error);
+            }
+        }
+        conversationToDeleteId = null;
+    }
+    document.getElementById("deleteModal").style.display = "none";
+});
+
+
+// --- Conversation Search Functionality ---
+// --- Conversation Search Functionality ---
+// --- Conversation Search Functionality ---
+let currentSearchTerm = ''; // Variable to store the current search query
+
+function renderConversationList() {
+  const listContainer = document.getElementById('conversation-list');
+  const sidebar = document.querySelector('.sidebar');
+
+  // --- 1. Ensure Search Input Exists in a Non-Scrolling Header Area (Run Once) ---
+  let searchInput = document.getElementById('conversation-search-input');
+  let sidebarHeader = document.querySelector('.sidebar-header'); // Dedicated header area
+
+  // Cleanup: Remove any search inputs accidentally placed directly inside listContainer in previous attempts
+  const oldInputsInList = listContainer.querySelectorAll('input.conversation-search-input, #conversation-search-input');
+  oldInputsInList.forEach(input => {
+    if (input.parentNode === listContainer) {
+      console.log("Removing old search input from list container");
+      input.remove();
+    }
+  });
+
+  if (!searchInput) {
+    console.log("Creating new search input...");
+    searchInput = document.createElement('input');
+    searchInput.type = 'text';
+    searchInput.id = 'conversation-search-input';
+    searchInput.className = 'conversation-search-input';
+    searchInput.placeholder = 'Search conversations...';
+
+    // Add event listener for the search input (only once)
+    searchInput.addEventListener('input', (e) => {
+      currentSearchTerm = e.target.value.trim().toLowerCase();
+      renderConversationList(); // Re-render the list with the new filter
+    });
+  }
+
+  // Ensure the dedicated sidebar header exists
+  if (!sidebarHeader) {
+    console.log("Creating sidebar header...");
+    sidebarHeader = document.createElement('div');
+    sidebarHeader.className = 'sidebar-header';
+    // Insert the header at the very beginning of the sidebar, before the list
+    sidebar.insertBefore(sidebarHeader, listContainer);
+  }
+
+  // Ensure the search input is inside the header and is the first element
+  if (searchInput.parentNode !== sidebarHeader) {
+    console.log("Moving/adding search input to sidebar header...");
+    sidebarHeader.insertBefore(searchInput, sidebarHeader.firstChild);
+  }
+
+
+  // --- 2. Filter the Conversations ---
+  let conversationsToShow;
+  if (currentSearchTerm === '') {
+    conversationsToShow = conversations; // Show all if search is empty
+  } else {
+    conversationsToShow = conversations.filter(convo => {
+      const titleMatch = (convo.title && convo.title.toLowerCase().includes(currentSearchTerm));
+      const previewMatch = (convo.preview && convo.preview.toLowerCase().includes(currentSearchTerm));
+      return titleMatch || previewMatch; // Show if title OR preview matches
+    });
+  }
+
+  // --- 3. Efficiently Update the List Items (Prevents Re-render Flicker & Keeps Focus) ---
+
+  // Get all current conversation item elements
+  const existingItems = Array.from(listContainer.querySelectorAll('.conversation-item'));
+  const existingItemMap = {}; // Map conversation ID to its DOM element
+  existingItems.forEach(item => {
+      const convoId = item.dataset.convoId;
+      if (convoId) {
+          existingItemMap[convoId] = item;
+      } else {
+          // Remove items without proper ID (shouldn't happen with this code, but safe)
+          item.remove();
+      }
+  });
+
+  // Track which conversation IDs we are about to display
+  const displayedIds = new Set();
+
+  // Create or update items for conversations to show
+  conversationsToShow.forEach((conversation, index) => {
+      displayedIds.add(conversation.id);
+
+      let item = existingItemMap[conversation.id];
+
+      if (!item) {
+          // Item doesn't exist, create it
+          item = document.createElement('div');
+          item.className = 'conversation-item';
+          item.dataset.convoId = conversation.id; // Add data attribute for identification
+
+          // Use innerHTML for initial structure (okay for creation)
+          item.innerHTML = `
+            <div class="conversation-title"></div>
+            <div class="conversation-preview"></div>
+            <div class="conversation-date"></div>
+            <button class="delete-conversation">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"><path d="M280-120q-33 0-56.5-23.5T200-200v-520h-40v-80h200v-40h240v40h200v80h-40v520q0 33-23.5 56.5T680-120H280Zm400-600H280v520h400v-520ZM360-280h80v-360h-80v360Zm160 0h80v-360h-80v360ZM280-720v520-520Z"/></svg>
+            </button>
+          `;
+
+          // Add event listeners (once on creation)
+          item.addEventListener('click', () => loadConversation(conversation.id));
+
+          const deleteBtn = item.querySelector('.delete-conversation');
+          deleteBtn.addEventListener('click', (e) => {
+              e.stopPropagation();
+              showDeletePopup(conversation.id);
+          });
+
+          // Insert the new item in the correct position
+          const nextSibling = listContainer.querySelector(`.conversation-item:nth-child(${index + 1})`);
+          if (nextSibling) {
+             listContainer.insertBefore(item, nextSibling);
+          } else {
+             listContainer.appendChild(item);
+          }
+      }
+
+      // --- Update content and state of the item ---
+      const titleEl = item.querySelector('.conversation-title');
+      const previewEl = item.querySelector('.conversation-preview');
+      const dateEl = item.querySelector('.conversation-date');
+
+      if (titleEl) titleEl.textContent = conversation.title || 'New Chat';
+      if (previewEl) previewEl.textContent = conversation.preview || '';
+      if (dateEl) dateEl.textContent = formatDate(conversation.timestamp);
+
+      // Update active state class
+      if (conversation.id === currentConversationId) {
+          item.classList.add('active');
+      } else {
+          item.classList.remove('active');
+      }
+  });
+
+  // Remove items that are no longer in the filtered list
+  existingItems.forEach(item => {
+      const id = item.dataset.convoId;
+      if (id && !displayedIds.has(id)) {
+          item.remove();
+      }
+  });
+}
+// --- End of Conversation Search Functionality ---
+
+// --- End of Conversation Search Functionality ---
+// --- End of Conversation Search Functionality ---
+// Update the loadConversation function to properly handle videos and load from Appwrite
+function loadConversation(id) {
+    const conversation = conversations.find(c => c.id === id);
+    if (!conversation) return;
+    currentConversationId = id;
+    currentMessages = conversation.messages;
+    const responseDiv = document.getElementById('response');
+    responseDiv.innerHTML = '';
+    const homeGreeting = document.getElementById('homeGreeting');
+    if (homeGreeting) {
+        homeGreeting.style.display = 'none';
+    }
+    conversation.messages.forEach(msg => {
+        const bubble = document.createElement('div');
+        bubble.className = `chat-bubble ${msg.role === 'user' ? 'user-msg' : 'bot-msg'}`;
+        if (msg.role === 'assistant') {
+            bubble.innerHTML = marked.parse(msg.content);
+        } else {
+            if (msg.content) {
+                const textElement = document.createElement('div');
+                textElement.textContent = msg.content;
+                textElement.style.wordBreak = 'break-word';
+                bubble.appendChild(textElement);
+            }
+            if (msg.files && msg.files.length > 0) {
+                 const imageFiles = msg.files.filter(file => file.type.startsWith('image/') || file.type.startsWith('video/'));
+                const otherFiles = msg.files.filter(file => !file.type.startsWith('image/') && !file.type.startsWith('video/'));
+                if (otherFiles.length > 0) {
+                    const filesContainer = document.createElement('div');
+                    filesContainer.className = 'message-files-container';
+                    otherFiles.forEach(fileInfo => { // fileInfo now has fileId
+                        const fileType = getFileType(fileInfo);
+                        const fileElement = document.createElement('div');
+                        fileElement.className = 'message-file';
+                        const iconElement = document.createElement('i');
+                        iconElement.className = `${fileType.icon.split(' ')[0]} ${fileType.icon.split(' ')[1]} ${fileType.class}`;
+                        const nameElement = document.createElement('span');
+                        nameElement.textContent = fileInfo.name.length > 20 ? fileInfo.name.substring(0, 17) + '...' : fileInfo.name;
+                        fileElement.appendChild(iconElement);
+                        fileElement.appendChild(nameElement);
+                        filesContainer.appendChild(fileElement);
+                    });
+                    bubble.appendChild(filesContainer);
+                }
+                if (imageFiles.length > 0) {
+                    const mediaContainer = document.createElement('div');
+                    mediaContainer.className = 'message-media-container';
+                    imageFiles.forEach(fileInfo => { // fileInfo now has fileId
+                        const mediaWrapper = document.createElement('div');
+                        mediaWrapper.style.position = 'relative';
+                        mediaWrapper.style.maxWidth = '100%';
+                        mediaWrapper.style.marginBottom = '8px';
+                        // Get the URL from Appwrite using the stored fileId
+                        const fileUrl = getAppwriteFileUrl(fileInfo.fileId);
+                        if (fileInfo.type.startsWith('image/')) {
+                            if (fileUrl) {
+                                const img = document.createElement('img');
+                                img.src = fileUrl.href; // Get string URL
+                                img.className = 'user-media';
+                                img.style.cursor = 'pointer';
+                                img.onclick = () => viewImageFromUrl(fileUrl);
+                                mediaWrapper.appendChild(img);
+                            } else {
+                                // Handle error case if URL couldn't be generated
+                                const errorElement = document.createElement('div');
+                                errorElement.className = 'file-error';
+                                errorElement.textContent = `Could not load image: ${fileInfo.name}`;
+                                mediaWrapper.appendChild(errorElement);
+                            }
+                        } else if (fileInfo.type.startsWith('video/')) {
+                            if (fileUrl) {
+                                const video = document.createElement('video');
+                                video.src = fileUrl.href; // Get string URL
+                                video.className = 'user-media';
+                                video.controls = true;
+                                video.style.maxWidth = '100%'; // Ensure it fits
+                                video.style.maxHeight = '200px'; // Keep consistent with images
+                                video.style.borderRadius = '8px';
+                                video.style.objectFit = 'contain';
+
+                                // --- Additions for better playback ---
+                                video.preload = 'metadata'; // Load metadata for better UX
+
+                                // Optional: Add loading/error feedback
+                                const statusText = document.createElement('div');
+                                statusText.style.fontSize = '0.8em';
+                                statusText.style.color = '#888';
+                                statusText.textContent = 'Loading video...';
+
+                                mediaWrapper.appendChild(statusText);
+                                mediaWrapper.appendChild(video);
+
+                                // Update status on load
+                                video.addEventListener('loadeddata', () => {
+                                    statusText.textContent = 'Video ready. Click play.';
+                                    statusText.style.color = '#4CAF50'; // Green for success
+                                });
+
+                                // Handle loading errors
+                                video.addEventListener('error', (e) => {
+                                    console.error('Error loading video:', e);
+                                    statusText.textContent = 'Failed to load video.';
+                                    statusText.style.color = '#F44336'; // Red for error
+                                    // Optionally, show a placeholder or retry button
+                                });
+
+                                // Optional: Remove status text after a short time or on play
+                                video.addEventListener('play', () => {
+                                    setTimeout(() => {
+                                        if (statusText.parentNode) {
+                                            statusText.remove();
+                                        }
+                                    }, 2000); // Remove after 2 seconds of playback
+                                });
+
+                                // --- End Additions ---
+
+                                // Keep your existing play overlay logic if desired
+                                // ... (playOverlay code) ...
+
+                            } else {
+                                // Handle error case if URL couldn't be generated
+                                const errorElement = document.createElement('div');
+                                errorElement.className = 'file-error';
+                                errorElement.textContent = `Could not load video: ${fileInfo.name}`;
+                                mediaWrapper.appendChild(errorElement);
+                            }
+                        }
+                        mediaContainer.appendChild(mediaWrapper);
+                    });
+                    bubble.appendChild(mediaContainer);
+                }
+            }
+        }
+        responseDiv.appendChild(bubble);
+    });
+    enhanceCodeBlocks();
+    document.querySelectorAll('pre code').forEach(block => {
+        hljs.highlightElement(block);
+    });
+    renderConversationList();
+    responseDiv.scrollTop = responseDiv.scrollHeight;
+}
+function showHomeGreeting() {
+    currentConversationId = null;
+    currentMessages = [];
+    const responseDiv = document.getElementById('response');
+    responseDiv.innerHTML = `
+        <div class="home-greeting" id="homeGreeting">
+            <img src="https://i.ibb.co/m35mFtZ/image-4.png" alt="Bot Logo">
+            <h2>Hello there!</h2>
+            <p>How can I help you today?</p>
+        </div>
+    `;
+}
+// Format date for display
+function formatDate(timestamp) {
+    const date = new Date(timestamp);
+    return date.toLocaleDateString() + ' ' + date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+}
+marked.setOptions({
+    highlight: function (code, lang) {
+        if (lang && hljs.getLanguage(lang)) {
+            return hljs.highlight(lang, code).value;
+        }
+        return hljs.highlightAuto(code).value;
+    },
+    langPrefix: 'hljs language-',
+});
+function copyToClipboard(codeElement, button) {
+    const text = codeElement.innerText;
+    navigator.clipboard.writeText(text).then(() => {
+        // Change button text temporarily
+        button.innerHTML = 'Copied!<i class="fas fa-check"></i>';
+        setTimeout(() => {
+            button.innerHTML = '<i class="far fa-copy"></i> Copy';
+        }, 2000);
+    }).catch(err => {
+        console.error('Failed to copy:', err);
+        button.innerHTML = '<i class="fas fa-times"></i> Failed';
+        setTimeout(() => {
+            button.innerHTML = '<i class="far fa-copy"></i> Copy';
+        }, 2000);
+    });
+}
+function enhanceCodeBlocks() {
+    document.querySelectorAll('pre code').forEach(block => {
+        // Skip if already processed
+        if (block.closest('.code-container')) return;
+        // Create container
+        const container = document.createElement('div');
+        container.className = 'code-container';
+        // Create header
+        const header = document.createElement('div');
+        header.className = 'code-header';
+        // Get language
+        const lang = block.className.split('language-')[1] ||
+                    hljs.getLanguage(block.className)?.name ||
+                    (block.textContent.trim() ? hljs.highlightAuto(block.textContent).language : 'code');
+        const languageSpan = document.createElement('span');
+        languageSpan.className = 'code-language';
+        languageSpan.textContent = lang || 'code';
+        const copyButton = document.createElement('button');
+        copyButton.className = 'copy-btn';
+        copyButton.innerHTML = '<i class="far fa-copy"></i> Copy';
+        copyButton.onclick = () => copyToClipboard(block, copyButton);
+        header.appendChild(languageSpan);
+        header.appendChild(copyButton);
+        container.appendChild(header);
+        // Clone the pre element
+        const preClone = block.parentElement.cloneNode(true);
+        container.appendChild(preClone);
+        // Replace original
+        block.parentElement.replaceWith(container);
+        // Apply highlighting
+        if (block.textContent.trim()) {
+            hljs.highlightElement(block);
+        }
+    });
+}
+function appendMessage(content, className, files = []) {
+    const responseDiv = document.getElementById('response');
+    const homeGreeting = document.getElementById('homeGreeting');
+    if (homeGreeting && className.includes('user-msg')) {
+        homeGreeting.style.display = "none";
+    }
+    const bubble = document.createElement('div');
+    bubble.className = `chat-bubble ${className}`;
+    // Always create text element first (even if empty)
+    const textElement = document.createElement('div');
+    textElement.textContent = content;
+    textElement.style.wordBreak = 'break-word';
+    textElement.style.whiteSpace = 'pre-wrap';
+    // Separate image files from other files
+    const imageFiles = files.filter(file =>
+  file.type.startsWith('image/') || file.type.startsWith('video/')
+);
+const otherFiles = files.filter(file =>
+  !file.type.startsWith('image/') && !file.type.startsWith('video/')
+);
+    // Add non-image files ABOVE the text
+    if (otherFiles.length > 0) {
+        const filesContainer = document.createElement('div');
+        filesContainer.className = 'message-files-container';
+        otherFiles.forEach(fileInfo => { // Use fileInfo object
+            const fileType = getFileType(fileInfo);
+            const fileElement = document.createElement('div');
+            fileElement.className = 'message-file';
+            const iconElement = document.createElement('i');
+            iconElement.className = `${fileType.icon.split(' ')[0]} ${fileType.icon.split(' ')[1]} ${fileType.class}`;
+            const nameElement = document.createElement('span');
+            nameElement.textContent = fileInfo.name.length > 20 ?
+                fileInfo.name.substring(0, 17) + '...' : fileInfo.name;
+            fileElement.appendChild(iconElement);
+            fileElement.appendChild(nameElement);
+            filesContainer.appendChild(fileElement);
+        });
+        bubble.appendChild(filesContainer);
+    }
+    // Add the text content
+    if (content) {
+        bubble.appendChild(textElement);
+    }
+    // Add image files BELOW the text
+    if (imageFiles.length > 0) {
+        const mediaContainer = document.createElement('div');
+        mediaContainer.className = 'message-media-container';
+        imageFiles.forEach(fileInfo => { // Use fileInfo object
+            const mediaWrapper = document.createElement('div');
+            mediaWrapper.style.position = 'relative';
+            mediaWrapper.style.maxWidth = '100%';
+            mediaWrapper.style.marginBottom = '8px';
+            // Use the File object to create a local URL for preview
+            const localUrl = URL.createObjectURL(fileInfo.file); // fileInfo.file is the File object
+            if (fileInfo.type.startsWith('image/')) {
+                const img = document.createElement('img');
+                img.src = localUrl;
+                img.className = 'user-media';
+                img.style.cursor = 'pointer';
+                img.onload = () => URL.revokeObjectURL(localUrl); // Clean up object URL
+                img.onclick = () => viewImageFromUrl({ href: localUrl }); // Use local URL for preview
+                mediaWrapper.appendChild(img);
+            } else if (fileInfo.type.startsWith('video/')) {
+                const video = document.createElement('video');
+                video.src = localUrl;
+                video.className = 'user-media';
+                video.controls = true;
+                video.style.maxHeight = '200px';
+                video.style.borderRadius = '8px';
+                video.style.objectFit = 'contain';
+                video.onload = () => URL.revokeObjectURL(localUrl); // Clean up object URL
+                // Add play button overlay
+                const playOverlay = document.createElement('div');
+                playOverlay.className = 'play-overlay';
+                playOverlay.innerHTML = '<i class="fas fa-play"></i>';
+                mediaWrapper.appendChild(video);
+                mediaWrapper.appendChild(playOverlay);
+                // Hide overlay when controls are shown
+                video.addEventListener('play', () => {
+                    playOverlay.style.display = 'none';
+                });
+                video.addEventListener('pause', () => {
+                    playOverlay.style.display = 'flex';
+                });
+            }
+            mediaContainer.appendChild(mediaWrapper);
+        });
+        bubble.appendChild(mediaContainer);
+    }
+    responseDiv.appendChild(bubble);
+    responseDiv.scrollTop = responseDiv.scrollHeight;
+}
+
+// Modify the typeEffect function to implement smart scrolling
+function typeEffect(markdown, className) {
+    const responseDiv = document.getElementById('response');
+    const homeGreeting = document.getElementById('homeGreeting');
+    const sendBtn = document.getElementById('sendBtn');
+    if (homeGreeting) homeGreeting.style.display = "none";
+    sendBtn.disabled = true;
+    
+    const bubble = document.createElement('div');
+    bubble.className = `chat-bubble ${className}`;
+    responseDiv.appendChild(bubble);
+    
+    // Add scroll event listener to detect user scrolling
+    const scrollHandler = () => {
+        const isAtBottom = responseDiv.scrollHeight - responseDiv.scrollTop <= responseDiv.clientHeight + 50;
+        userIsScrolling = !isAtBottom;
+        autoScrollEnabled = isAtBottom;
+    };
+    
+    responseDiv.addEventListener('scroll', scrollHandler);
+    
+    const parsedHTML = marked.parse(markdown);
+    let i = 0;
+    const temp = document.createElement('div');
+    temp.innerHTML = parsedHTML;
+    const nodes = Array.from(temp.childNodes);
+    bubble.innerHTML = '';
+    let currentNodeIndex = 0;
+    let currentCharIndex = 0;
+    
+    const type = () => {
+        if (currentNodeIndex >= nodes.length) {
+            enhanceCodeBlocks();
+            sendBtn.disabled = false;
+            responseDiv.removeEventListener('scroll', scrollHandler);
+            return;
+        }
+        
+        let node = nodes[currentNodeIndex];
+        const clonedNode = node.cloneNode(true);
+        const fullText = clonedNode.innerHTML || clonedNode.textContent;
+        const partialText = fullText.substring(0, currentCharIndex + 1);
+        bubble.innerHTML = '';
+        
+        for (let j = 0; j < currentNodeIndex; j++) {
+            bubble.appendChild(nodes[j].cloneNode(true));
+        }
+        
+        let partialNode = node.cloneNode();
+        partialNode.innerHTML = partialText;
+        bubble.appendChild(partialNode);
+        enhanceCodeBlocks();
+        
+        // Only scroll if user hasn't manually scrolled up
+        if (autoScrollEnabled) {
+            responseDiv.scrollTop = responseDiv.scrollHeight;
+        }
+        
+        if (currentCharIndex < fullText.length - 1) {
+            currentCharIndex++;
+            setTimeout(type, 1);
+        } else {
+            currentNodeIndex++;
+            currentCharIndex = 0;
+            setTimeout(type, 1.2);
+        }
+        
+        bubble.querySelectorAll('pre code').forEach(block => {
+            if (block.textContent.trim()) {
+                hljs.highlightElement(block);
+            }
+        });
+    };
+    
+    type();
+}
+function getCurrentDateTimeInfo() {
+    const now = new Date();
+    const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    const months = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+    return {
+        time: now.toLocaleTimeString(),
+        date: now.toLocaleDateString(),
+        dayName: days[now.getDay()],
+        day: now.getDate(),
+        monthName: months[now.getMonth()],
+        month: now.getMonth() + 1,
+        year: now.getFullYear(),
+        hours: now.getHours(),
+        minutes: now.getMinutes(),
+        seconds: now.getSeconds(),
+        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+        fullDateTime: now.toString()
+    };
+}
+
+// --- Web Search Functionality ---
+
+// Function to perform the actual search using SerpAPI
+async function performWebSearch(query) {
+    if (!SERPAPI_KEY) {
+        console.error("SerpAPI key is not configured.");
+        throw new Error("Web search is not configured correctly.");
+    }
+    
+    const encodedQuery = encodeURIComponent(query);
+    // Inside performWebSearch function, replace the serpApiUrl line:
+    // const serpApiUrl = `https://serpapi.com/search.json?engine=google&q=${encodedQuery}&api_key=${SERPAPI_KEY}`;
+    
+    // With a CORS proxy (Example using corsproxy.io - find a reliable one for production)
+    const serpApiUrl = `https://corsproxy.io/?${encodeURIComponent(`https://serpapi.com/search.json?engine=google&q=${encodedQuery}&api_key=${SERPAPI_KEY}`)}`;
+    
+    try {
+        const response = await fetch(serpApiUrl);
+        if (!response.ok) {
+            throw new Error(`SerpAPI request failed with status ${response.status}`);
+        }
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error("Error performing web search:", error);
+        throw error; // Re-throw to be caught by the caller
+    }
+}
+
+// Function to extract top N organic results from SerpAPI response
+function extractTopResults(searchData, topN = 10) {
+    if (!searchData || !Array.isArray(searchData.organic_results)) {
+        console.warn("Invalid search data format or no results found.");
+        return [];
+    }
+    return searchData.organic_results.slice(0, topN);
+}
+
+// Function to format search results for the prompt
+function formatSearchResultsForPrompt(results) {
+    if (!results || results.length === 0) {
+        return "No relevant search results were found.";
+    }
+    
+    let formattedText = "Here are the top search results:\n\n";
+    results.forEach((result, index) => {
+        formattedText += `${index + 1}. Title: ${result.title || 'N/A'}\n`;
+        formattedText += `   Snippet: ${result.snippet || 'N/A'}\n`;
+        formattedText += `   Link: ${result.link || 'N/A'}\n\n`;
+    });
+    return formattedText;
+}
+
+// --- Main Message Sending Logic (Modified) ---
+
+// Decide if a search is needed based on user message (simple heuristic)
+// Decide if a search is needed based on user message and search button state
+function shouldTriggerSearch(message, isSearchButtonActive) {
+    const lowerMessage = message.toLowerCase().trim();
+    
+    // List of conversational phrases that should NOT trigger search
+    const nonSearchPhrases = [
+        "hello", "hi", "hey", "hola", "good morning", "good afternoon", "good evening",
+        "who are you", "what are you", "introduce yourself", "tell me about yourself",
+        "i am", "i'm", "my name is", "i go by", "i work as", "i'm feeling",
+        "how are you", "how's it going", "what's up", "thanks", "thank you", "please",
+        "yes", "no", "okay", "ok", "alright", "cool", "great", "fine", "good",
+        "hey there", "hi there", "what's happening", "what's new", "howdy",
+        "nice to meet you", "pleased to meet you", "good to see you", "long time no see",
+        "what can you do", "help me", "can you help", "need help", "support",
+        "bye", "goodbye", "see you", "farewell", "take care", "have a good day",
+        "lol", "haha", "hehe", "funny", "joke", "tell me a joke", "make me laugh"
+    ];
+    
+    // Check if the message is a non-search phrase
+    const isNonSearchPhrase = nonSearchPhrases.some(phrase =>
+        lowerMessage === phrase ||
+        lowerMessage.startsWith(phrase + " ") ||
+        lowerMessage.endsWith(" " + phrase) ||
+        lowerMessage.includes(" " + phrase + " ")
+    );
+    
+    // If the search button is active, search UNLESS it's a non-search phrase
+    if (isSearchButtonActive) {
+        return !isNonSearchPhrase;
+    }
+    
+    // If the search button is NOT active, only search for specific trigger phrases
+    const searchTriggers = [
+        "current", "latest", "now", "today", "recent", "update", "news", "happening",
+        "richest man", "weather", "stock", "price", "market", "crypto", "bitcoin",
+        "score", "live", "trending", "top", "who is", "what is", "how to", "where is",
+        "what is the", "how is the", "current info", "latest news", "breaking news",
+        "search web", "search the web", "do some search", "search for", "find info",
+        "today news", "live update", "real-time", "just happened", "recently",
+        "best", "compare", "review", "vs", "versus", "difference between", "pros and cons",
+        "statistics", "data", "research", "study", "survey", "poll", "results",
+        "definition", "meaning", "explain", "describe", "tell me about", "information about"
+    ];
+    
+    return searchTriggers.some(trigger =>
+        lowerMessage.includes(trigger) &&
+        !isNonSearchPhrase // Double-check it's not a conversational phrase
+    );
+}
+// --- Updated sendMessage function to use Base64 for Gemini API ---
+async function sendMessage() {
+    const input = document.getElementById('userInput');
+    const message = input.value.trim();
+    const sendBtn = document.getElementById('sendBtn');
+    if (!message && selectedFiles.length === 0) return;
+    sendBtn.disabled = true;
+    if (!currentConversationId) {
+        currentConversationId = Date.now().toString();
+    }
+    let userMessageContent = message || "Describe these files";
+    
+    // Prepare fileInfo objects for storing in messages (before upload)
+    const fileInfoForMessage = selectedFiles.map(f => ({
+        name: f.name,
+        type: f.type,
+        size: f.size,
+        fileId: null // Will be updated after upload
+    }));
+    
+    // Add user message to history (before file upload)
+    currentMessages.push({
+        role: 'user',
+        content: message || "Describe these files",
+        files: fileInfoForMessage,
+        timestamp: Date.now()
+    });
+    
+    // Display message with files
+    appendMessage(message || "Describe these files", 'user-msg', selectedFiles);
+    
+    // Clear input and previews
+    input.value = '';
+    const filesToUpload = [...selectedFiles];
+    selectedFiles = [];
+    updatePreview();
+    input.style.height = '40px';
+    document.getElementById('chatInputArea').style.minHeight = '95px';
+    
+
+ // Determine if search should be triggered
+ const searchBtn = document.getElementById('search-btn');
+ const isSearchRequested = searchBtn ? searchBtn.classList.contains('active') : false;
+ 
+    // Pass the search button state to the function
+    const isAutoSearchTriggered = shouldTriggerSearch(userMessageContent, isSearchRequested); // <-- UPDATED LINE
+    let searchResultsForPrompt = "";
+    let searchPerformed = false;
+    try {
+        // --- 1. Upload Files to Appwrite ---
+        const fileInfoToUpdateInHistory = currentMessages[currentMessages.length - 1].files;
+        for (let i = 0; i < filesToUpload.length; i++) {
+            const fileInfo = filesToUpload[i];
+            if (fileInfo.file) {
+                try {
+                    // Show progress bar
+                    const previewItem = document.querySelector(`.preview-item[data-file-id="${fileInfo.id}"]`);
+                    if (previewItem) {
+                        const progressBarContainer = previewItem.querySelector('.progress-bar-container');
+                        const progressBar = previewItem.querySelector('.progress-bar');
+                        if (progressBarContainer && progressBar) {
+                            progressBarContainer.style.display = 'block';
+                            progressBar.style.width = '0%';
+                        }
+                    }
+                    
+                    // Upload file with progress callback
+                    const response = await storage.createFile(
+                        APPWRITE_BUCKET_ID,
+                        'unique()',
+                        fileInfo.file,
+                        [],
+                        [],
+                        (chunk) => {
+                            if (previewItem) {
+                                const progressBar = previewItem.querySelector('.progress-bar');
+                                if (progressBar && chunk.total > 0) {
+                                    const percent = (chunk.loaded / chunk.total) * 100;
+                                    progressBar.style.width = `${percent}%`;
+                                }
+                            }
+                        }
+                    );
+                    
+                    const fileId = response.$id;
+                    if (fileInfoToUpdateInHistory[i]) {
+                        fileInfoToUpdateInHistory[i].fileId = fileId;
+                    }
+                    console.log(`File ${fileInfo.name} uploaded with ID: ${fileId}`);
+                    
+                    // Hide progress bar after upload
+                    if (previewItem) {
+                        const progressBarContainer = previewItem.querySelector('.progress-bar-container');
+                        if (progressBarContainer) {
+                            progressBarContainer.style.display = 'none';
+                        }
+                    }
+                } catch (error) {
+                    console.error(`Error uploading file ${fileInfo.name}:`, error);
+                    const previewItem = document.querySelector(`.preview-item[data-file-id="${fileInfo.id}"]`);
+                    if (previewItem) {
+                        const progressBarContainer = previewItem.querySelector('.progress-bar-container');
+                        if (progressBarContainer) {
+                            progressBarContainer.style.display = 'none';
+                        }
+                    }
+                    appendMessage(`Error uploading file ${fileInfo.name}.`, 'bot-msg error-message');
+                    if (fileInfoToUpdateInHistory[i]) {
+                        fileInfoToUpdateInHistory[i].fileId = null;
+                    }
+                }
+            } else {
+                console.warn(`File object not found for ${fileInfo.name}`);
+                if (fileInfoToUpdateInHistory[i]) {
+                    fileInfoToUpdateInHistory[i].fileId = null;
+                }
+            }
+        }
+        
+        // --- 2. Perform Web Search if needed ---
+        if (isSearchRequested || isAutoSearchTriggered) {
+            showSearchingAnimation();
+            try {
+                console.log("Initiating web search for query:", userMessageContent);
+                const searchData = await performWebSearch(userMessageContent);
+                const topResults = extractTopResults(searchData, 3);
+                searchResultsForPrompt = formatSearchResultsForPrompt(topResults);
+                searchPerformed = true;
+                console.log("Search results prepared for prompt.");
+            } catch (searchError) {
+                console.error('Web Search Error:', searchError);
+                hideSearchingAnimation();
+                appendMessage(`Error during web search: ${searchError.message}. Proceeding without search results.`, 'bot-msg error-message');
+            }
+        } else {
+            showThinkingAnimation();
+        }
+        
+        // --- 3. Prepare Gemini API Request ---
+        const contents = [];
+        
+        // Add conversation history
+        for (const msg of currentMessages) {
+            if (msg.role === 'user') {
+                const parts = [];
+                if (msg.content) {
+                    parts.push({ text: msg.content });
+                }
+                
+                if (msg.files && msg.files.length > 0) {
+                    for (const fileInfo of msg.files) {
+                        const originalFileInfo = filesToUpload.find(f => f.name === fileInfo.name && f.size === fileInfo.size);
+                        if (originalFileInfo && originalFileInfo.file) {
+                            try {
+                                const base64Data = await fileToBase64(originalFileInfo.file);
+                                parts.push({
+                                    inlineData: {
+                                        mimeType: originalFileInfo.type,
+                                        data: base64Data
+                                    }
+                                });
+                                console.log(`Added Base64 data for file: ${originalFileInfo.name}`);
+                            } catch (error) {
+                                console.error(`Error converting file ${fileInfo.name} to Base64:`, error);
+                                continue;
+                            }
+                        }
+                    }
+                }
+                
+                if (parts.length > 0) {
+                    contents.push({
+                        role: 'user',
+                        parts: parts
+                    });
+                }
+            } else if (msg.role === 'assistant') {
+                contents.push({
+                    role: 'model',
+                    parts: [{ text: msg.content }]
+                });
+            }
+        }
+        
+        // Add search results if available
+        if (searchPerformed && searchResultsForPrompt) {
+            contents.push({
+                role: 'user',
+                parts: [{ text: `Please use the following search results to inform your answer:\n\n${searchResultsForPrompt}` }]
+            });
+        }
+        
+        // Add system instruction
+        const dateTimeInfo = getCurrentDateTimeInfo();
+        const systemInstruction = {
+            parts: [{
+                text: `You are a helpful assistant. Current date/time information:
+                - Full date: ${dateTimeInfo.date}
+                - Day of week: ${dateTimeInfo.dayName}
+                - Time: ${dateTimeInfo.time}
+                - Timezone: ${dateTimeInfo.timezone}`
+            }]
+        };
+        
+        const requestBody = {
+            contents: contents,
+            systemInstruction: systemInstruction,
+            generationConfig: {
+                temperature: 0.9,
+                topK: 1,
+                topP: 1,
+                maxOutputTokens: 2048
+            }
+        };
+        
+        // --- 4. Call Gemini API ---
+        const response = await fetch(
+            `https://generativelanguage.googleapis.com/v1beta/models/${currentModel}:generateContent?key=${API_KEY}`,
+            {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(requestBody)
+            }
+        );
+        
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error?.message || 'Failed to get response from API');
+        }
+        
+        const data = await response.json();
+        let botReply = '';
+        if (data.candidates && data.candidates[0] && data.candidates[0].content && data.candidates[0].content.parts) {
+            botReply = data.candidates[0].content.parts.map(part => part.text).join('');
+        } else {
+            botReply = 'No response received.';
+            console.error('Unexpected API response structure:', data);
+        }
+        
+        // Hide appropriate animation
+        if (isSearchRequested || isAutoSearchTriggered) {
+            hideSearchingAnimation();
+        } else {
+            hideThinkingAnimation();
+        }
+        
+        // Add bot response to messages
+        currentMessages.push({
+            role: 'assistant',
+            content: botReply,
+            timestamp: Date.now()
+        });
+        
+        // Display bot response
+        typeEffect(botReply, 'bot-msg');
+        
+        // Save conversation
+        await saveConversation();
+    } catch (err) {
+        // Hide appropriate animation on error
+        if (isSearchRequested || isAutoSearchTriggered) {
+            hideSearchingAnimation();
+        } else {
+            hideThinkingAnimation();
+        }
+        console.error('Full Error:', err);
+        appendMessage(`Error: ${err.message}`, 'bot-msg error-message');
+    } finally {
+        if (sendBtn) sendBtn.disabled = false;
+        // Reset search button state
+        const searchBtn = document.getElementById('search-btn');
+        if (searchBtn) {
+            searchBtn.classList.remove('active');
+            searchBtn.title = "Enable Web Search";
+        }
+    }
+}
+
+
+// --- UI Initialization and Event Listeners (Modified) ---
+
+// Function to initialize UI elements, including the new search button
+function initializeUI() {
+    const cameraBtn = document.getElementById('camera-btn');
+    const micBtn = document.getElementById('mic-btn');
+    
+    // Create the Search Button
+    const searchBtn = document.createElement('button');
+    searchBtn.id = 'search-btn';
+    searchBtn.title = "Enable Web Search";
+    searchBtn.innerHTML = `
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960" width="23px" height="23px">
+            <path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Z"/>
+        </svg>
+    `;
+    searchBtn.classList.add('action-btn'); // Assuming you have common styles for action buttons
+    
+    // Position the search button relative to existing buttons
+    // This assumes #plus-btn is the reference point. Adjust CSS as needed.
+    searchBtn.style.position = 'absolute';
+    searchBtn.style.bottom = '8px';
+    searchBtn.style.left = '128px'; // Adjust based on plus-btn width + desired gap
+    searchBtn.style.background = 'var(--chatinputareabtnbg)';
+    searchBtn.style.stroke = 'var(--svgcolor)';
+    searchBtn.style.border = '1px solid var(--chatareabtn)';
+    searchBtn.style.fontSize = '20px';
+    searchBtn.style.borderRadius = '50px';
+    searchBtn.style.cursor = 'pointer';
+    searchBtn.style.padding = '2px 6px';
+    searchBtn.style.alignItems = 'center';
+    searchBtn.style.justifyContent = 'center';
+    searchBtn.style.transition = 'all 0.2s ease';
+    searchBtn.style.fill = 'var(--basic-reverse-color)';
+    
+    // Add active state style via JS or ensure CSS handles .active class
+    searchBtn.addEventListener('click', function() {
+        this.classList.toggle('active');
+        if (this.classList.contains('active')) {
+            this.title = "Web Search Enabled";
+        } else {
+            this.title = "Enable Web Search";
+        }
+    });
+    
+    // Insert the search button into the DOM, likely near other buttons
+    const chatInputArea = document.getElementById('chatInputArea');
+    if (chatInputArea) {
+        chatInputArea.style.position = 'relative'; // Ensure parent is positioned
+        chatInputArea.appendChild(searchBtn);
+    } else {
+        console.error("Could not find parent element to append search button.");
+    }
+    
+    if (cameraBtn) {
+        cameraBtn.addEventListener('click', openCamera);
+    }
+    
+    if (micBtn) {
+        // Simplified speech recognition setup placeholder
+        // You would integrate the full speech recognition logic here
+        micBtn.addEventListener('click', function() {
+            
+        });
+    }
+    
+    const sendButton = document.getElementById('sendBtn');
+    if (sendButton) {
+        sendButton.addEventListener('click', sendMessage);
+    }
+    
+    const fileInput = document.getElementById('fileInput');
+    if (fileInput) {
+        fileInput.addEventListener('change', handleFileSelect);
+    }
+    
+    // --- Initialize other UI components ---
+    initializeCameraUI();
+    setupEventListeners(); // If you have other general event listeners
+}
+
+
+
+// Auto-resizing textarea (expands upwards)
+// Improved auto-resizing textarea (expands upwards and handles mass deletion)
+const userInput = document.getElementById('userInput');
+const chatInputArea = document.getElementById('chatInputArea');
+function adjustInputHeight() {
+    // Reset height to get correct scrollHeight
+    userInput.style.height = 'auto';
+    // Calculate new height (minimum 40px, maximum 200px)
+    const newHeight = Math.min(Math.max(userInput.scrollHeight, 40), 200);
+    userInput.style.height = newHeight + 'px';
+    // Adjust the container height (minimum 95px)
+    chatInputArea.style.minHeight = (newHeight + 55) + 'px';
+    // Force reflow to ensure proper height calculation
+    void userInput.offsetHeight;
+}
+userInput.addEventListener('input', function() {
+    adjustInputHeight();
+    // Additional check for when all text is deleted (including via select-all + delete)
+    if (this.value === '') {
+        userInput.style.height = '40px';
+        chatInputArea.style.minHeight = '95px';
+    }
+});
+// Also trigger on paste events
+userInput.addEventListener('paste', adjustInputHeight);
+// Initialize with proper height
+adjustInputHeight();
+// Handle Enter key (send on Enter, but allow Shift+Enter for new line)
+userInput.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' && !e.shiftKey) {
+        const sendBtn = document.getElementById('sendBtn');
+        if (!sendBtn.disabled) {
+            sendMessage();
+            e.preventDefault(); // Prevent default Enter behavior (like adding a newline)
+        }
+    }
+});
+// Voice Recognition
+const micBtn = document.getElementById('mic-btn');
+let recognition;
+try {
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    recognition = new SpeechRecognition();
+} catch (e) {
+    console.error('Speech recognition not supported', e);
+    micBtn.style.display = 'none';
+}
+if (recognition) {
+    recognition.continuous = false;
+    recognition.interimResults = false;
+    recognition.lang = 'en-US';
+    recognition.onstart = function() {
+        micBtn.classList.add('recording');
+        userInput.placeholder = "Listening...";
+    };
+    recognition.onerror = function(event) {
+        console.error('Speech recognition error', event.error);
+        micBtn.classList.remove('recording');
+        userInput.placeholder = "Type a message...";
+        appendMessage('Voice recognition error: ' + event.error, 'bot-msg error-message');
+    };
+    recognition.onend = function() {
+        micBtn.classList.remove('recording');
+        userInput.placeholder = "Type a message...";
+    };
+    recognition.onresult = function(event) {
+        const transcript = event.results[0][0].transcript;
+        userInput.value = transcript;
+        sendMessage();
+    };
+    micBtn.addEventListener('click', function() {
+        if (micBtn.classList.contains('recording')) {
+            recognition.stop();
+            return;
+        }
+        try {
+            recognition.start();
+        } catch (error) {
+            console.error('Error starting recognition:', error);
+            appendMessage('Error starting voice recognition. Please ensure microphone permissions are granted.', 'bot-msg error-message');
+        }
+    });
+} else {
+    micBtn.style.display = 'none';
+}
+document.addEventListener('DOMContentLoaded', function() {
+    const sidebar = document.querySelector('.sidebar');
+    const dragHandle = document.querySelector('.drag-handle');
+    const overlay = document.querySelector('.overlay');
+    const menuBtn = document.getElementById('menu-btn');
+    let isDragging = false;
+    let startX = 0;
+    let currentX = 0;
+    let isOpen = false;
+    let startTime = 0;
+    let velocity = 0;
+    // Menu button click handler
+    menuBtn.addEventListener('click', toggleSidebar);
+    // Overlay click handler (close sidebar when clicking outside)
+    overlay.addEventListener('click', closeSidebar);
+    // For mouse events
+    document.addEventListener('mousedown', (e) => {
+        if (isOpen) return;
+        if (e.clientX < 50) {
+            startDrag(e.clientX);
+            e.preventDefault();
+        }
+    });
+    document.addEventListener('mousemove', (e) => {
+        if (!isDragging) return;
+        handleDrag(e.clientX);
+        e.preventDefault();
+    });
+    document.addEventListener('mouseup', (e) => {
+        if (!isDragging) return;
+        endDrag();
+        e.preventDefault();
+    });
+    // For touch events
+    document.addEventListener('touchstart', (e) => {
+        if (isOpen) {
+            startDrag(e.touches[0].clientX);
+            return;
+        }
+        //set this value below to determine starting left point
+        if (e.touches[0].clientX < 25) {
+            startDrag(e.touches[0].clientX);
+        }
+    }, { passive: true });
+    document.addEventListener('touchmove', (e) => {
+        if (!isDragging) return;
+        handleDrag(e.touches[0].clientX);
+        e.preventDefault();
+    }, { passive: false });
+    document.addEventListener('touchend', (e) => {
+        if (!isDragging) return;
+        endDrag();
+    }, { passive: true });
+    function startDrag(clientX) {
+        isDragging = true;
+        startX = clientX;
+        currentX = startX;
+        startTime = Date.now();
+        sidebar.style.transition = 'none';
+        overlay.style.transition = 'none';
+        if (isOpen) {
+            sidebar.style.transform = 'translateX(80vw)';
+        } else {
+            sidebar.style.transform = 'translateX(0)';
+        }
+    }
+    function handleDrag(clientX) {
+        const now = Date.now();
+        const timeDelta = now - startTime;
+        if (timeDelta > 0) {
+            velocity = (clientX - currentX) / timeDelta;
+            startTime = now;
+        }
+        currentX = clientX;
+        const diff = currentX - startX;
+        if (isOpen) {
+            // Closing gesture - swipe left
+            const translateX = Math.min(80, Math.max(0, 80 - (diff * -0.15)));
+            sidebar.style.transform = `translateX(${translateX}vw)`;
+            overlay.style.opacity = translateX / 80;
+        } else {
+            // Opening gesture - swipe right
+            const translateX = Math.min(80, Math.max(0, diff / window.innerWidth * 80));
+            sidebar.style.transform = `translateX(${translateX}vw)`;
+            overlay.style.opacity = translateX / 80;
+            overlay.style.visibility = 'visible';
+        }
+    }
+    function endDrag() {
+        isDragging = false;
+        const diff = currentX - startX;
+        const threshold = window.innerWidth * 0.3;
+        sidebar.style.transition = 'transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1)';
+        overlay.style.transition = 'opacity 0.3s, visibility 0.3s';
+        // Consider velocity in the decision
+        const velocityThreshold = 0.3;
+        const isFastSwipe = Math.abs(velocity) > velocityThreshold;
+        if (isOpen) {
+            // Closing logic
+            const shouldClose = (diff < -threshold) || (isFastSwipe && velocity < 0);
+            if (shouldClose) {
+                closeSidebar();
+            } else {
+                // Not enough to close - spring back to open
+                sidebar.style.transform = 'translateX(80vw)';
+                overlay.style.opacity = 1;
+            }
+        } else {
+            // Opening logic
+            const shouldOpen = (diff > threshold) || (isFastSwipe && velocity > 0);
+            if (shouldOpen) {
+                openSidebar();
+            } else {
+                // Not enough to open - spring back to closed
+                sidebar.style.transform = 'translateX(0)';
+                overlay.style.opacity = 0;
+                overlay.style.visibility = 'hidden';
+            }
+        }
+    }
+    // Handle drag handle events
+    dragHandle.addEventListener('mousedown', startDrag);
+    dragHandle.addEventListener('touchstart', startDrag, { passive: true });
+    function toggleSidebar() {
+        if (isOpen) {
+            closeSidebar();
+        } else {
+            openSidebar();
+        }
+    }
+    function openSidebar() {
+        sidebar.style.transform = 'translateX(80vw)';
+        sidebar.style.transition = 'transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1)';
+        overlay.style.opacity = 1;
+        overlay.style.visibility = 'visible';
+        overlay.style.transition = 'opacity 0.5s, visibility 0.3s';
+        isOpen = true;
+    }
+    function closeSidebar() {
+        sidebar.style.transform = 'translateX(0)';
+        sidebar.style.transition = 'transform 0.5s cubic-bezier(0.25, 0.8, 0.25, 1)';
+        overlay.style.opacity = 0;
+        overlay.style.visibility = 'hidden';
+        overlay.style.transition = 'opacity 0.5s, visibility 0.5s';
+        isOpen = false;
+    }
+    overlay.addEventListener('touchstart', (e) => {
+        if (!isOpen) return;
+        startX = e.touches[0].clientX;
+        currentX = startX;
+        isDragging = true;
+        sidebar.style.transition = 'none';
+        overlay.style.transition = 'none';
+    }, { passive: true });
+    overlay.addEventListener('touchmove', (e) => {
+        if (!isDragging || !isOpen) return;
+        currentX = e.touches[0].clientX;
+        const diff = currentX - startX;
+        // Only allow left swipes (closing direction)
+        if (diff < 0) {
+            const translateX = Math.max(0, 80 + (diff / window.innerWidth * 80));
+            sidebar.style.transform = `translateX(${translateX}vw)`;
+            overlay.style.opacity = translateX / 80;
+        }
+        e.preventDefault();
+    }, { passive: false });
+    overlay.addEventListener('touchend', () => {
+        if (!isDragging || !isOpen) return;
+        isDragging = false;
+        const diff = currentX - startX;
+        const threshold = window.innerWidth * 0.2;
+        sidebar.style.transition = 'transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1)';
+        overlay.style.transition = 'opacity 0.3s';
+        if (diff < -threshold) {
+            closeSidebar();
+        } else {
+            // Return to open state
+            sidebar.style.transform = 'translateX(80vw)';
+            overlay.style.opacity = 1;
+        }
+    }, { passive: true });
+    // Prevent any swipe events on the sidebar itself
+    sidebar.addEventListener('touchstart', (e) => {
+        e.stopPropagation();
+    }, { passive: true });
+    sidebar.addEventListener('touchmove', (e) => {
+        e.stopPropagation();
+    }, { passive: false });
+});
+ /*================ DARK LIGHT THEME ==================*/
+const themeButton = document.getElementById('theme-button')
+const darkTheme = 'dark-theme'
+const iconTheme = 'bx-sun'
+// Previously selected topic (if user selected)
+const selectedTheme = localStorage.getItem('selected-theme')
+const selectedIcon = localStorage.getItem('selected-icon')
+// We obtain the current theme that the interface has by validating the dark-theme class
+const getCurrentTheme = () => document.body.classList.contains(darkTheme) ? 'dark' : 'light'
+const getCurrentIcon = () => themeButton.classList.contains(iconTheme) ? 'bx-moon' : 'bx-sun'
+// We validate if the user previously chose a topic
+if (selectedTheme) {
+ // If the validation is fulfilled, we ask what the issue was to know if we activated or deactivated the dark
+ document.body.classList[selectedTheme === 'dark' ? 'add' : 'remove'](darkTheme)
+ themeButton.classList[selectedIcon === 'bx-moon' ? 'add' : 'remove'](iconTheme)
+}
+// Activate / deactivate the theme manually with the button
+themeButton.addEventListener('click', () => {
+ // Add or remove the dark / icon theme
+ document.body.classList.toggle(darkTheme)
+ themeButton.classList.toggle(iconTheme)
+ // We save the theme and the current icon that the user chose
+ localStorage.setItem('selected-theme', getCurrentTheme())
+ localStorage.setItem('selected-icon', getCurrentIcon())
+}
+);
+function showNotification(message) {
+  const notification = document.createElement('div');
+  notification.classList.add('notification');
+  notification.innerText = message;
+  document.body.appendChild(notification);
+  setTimeout(() => {
+    notification.classList.add('hide');
+  }, 1500);
+  setTimeout(() => {
+    notification.remove();
+  }, 2500);
+}
+
+// --- Camera Capture Logic ---
+// Function to initialize camera UI elements
+// --- Updated initializeCameraUI function with camera selection ---
+// Function to initialize camera UI elements
+function initializeCameraUI() {
+    // Get references to new elements
+    cameraModal = document.createElement('div');
+    cameraModal.className = 'camera-modal';
+    cameraModal.style.display = 'none'; // Initially hidden
+    document.body.appendChild(cameraModal);
+    
+    viewfinder = document.createElement('div');
+    viewfinder.className = 'camera-viewfinder';
+    videoElement = document.createElement('video');
+    videoElement.autoplay = true;
+    // Add a spinner for capture feedback
+    captureSpinner = document.createElement('div');
+    captureSpinner.className = 'capture-spinner';
+    captureSpinner.innerHTML = '<i class="fas fa-spinner fa-spin"></i>'; // Requires Font Awesome
+    viewfinder.appendChild(videoElement);
+    viewfinder.appendChild(captureSpinner);
+    
+    // --- Add Camera Selection Controls ---
+    const cameraSelectContainer = document.createElement('div');
+    cameraSelectContainer.className = 'camera-select-container';
+    cameraSelectContainer.style.marginTop = '10px';
+    cameraSelectContainer.style.display = 'flex';
+    cameraSelectContainer.style.justifyContent = 'center';
+    cameraSelectContainer.style.gap = '15px';
+    
+    const frontCamBtn = document.createElement('button');
+    frontCamBtn.className = 'camera-select-btn';
+    frontCamBtn.id = 'front-cam-btn';
+    frontCamBtn.innerHTML = '<i class="fas fa-camera"></i> Front'; // Simple icon/text
+    frontCamBtn.title = 'Use Front Camera';
+    
+    const rearCamBtn = document.createElement('button');
+    rearCamBtn.className = 'camera-select-btn';
+    rearCamBtn.id = 'rear-cam-btn';
+    rearCamBtn.innerHTML = '<i class="fas fa-camera-retro"></i> Back'; // Different icon
+    rearCamBtn.title = 'Use Back Camera';
+    
+    // Set initial button states based on stored preference or default (rear)
+    const storedCamPref = localStorage.getItem('nurvleCameraPreference') || 'environment';
+    updateCameraButtonStates(frontCamBtn, rearCamBtn, storedCamPref);
+    
+    cameraSelectContainer.appendChild(frontCamBtn);
+    cameraSelectContainer.appendChild(rearCamBtn);
+    // --- End Camera Selection Controls ---
+    
+    controls = document.createElement('div');
+    controls.className = 'camera-controls';
+    
+    captureBtn = document.createElement('button');
+    captureBtn.className = 'camera-btn camera-capture-btn';
+    captureBtn.innerHTML = '<i class="fas fa-camera"></i> Capture';
+    captureBtn.disabled = true; // Disable until stream is ready
+    
+    cancelBtn = document.createElement('button');
+    cancelBtn.className = 'camera-btn camera-cancel-btn';
+    cancelBtn.innerHTML = '<i class="fas fa-times"></i> Cancel';
+    
+    controls.appendChild(captureBtn);
+    controls.appendChild(cancelBtn);
+    cameraModal.appendChild(viewfinder);
+    cameraModal.appendChild(cameraSelectContainer); // Add selection container
+    cameraModal.appendChild(controls);
+    
+    // --- Event Listeners ---
+    // Camera selection event listeners
+    frontCamBtn.addEventListener('click', () => {
+        localStorage.setItem('nurvleCameraPreference', 'user');
+        updateCameraButtonStates(frontCamBtn, rearCamBtn, 'user');
+        restartCameraWithPreference('user');
+    });
+    
+    rearCamBtn.addEventListener('click', () => {
+        localStorage.setItem('nurvleCameraPreference', 'environment');
+        updateCameraButtonStates(frontCamBtn, rearCamBtn, 'environment');
+        restartCameraWithPreference('environment');
+    });
+    
+    // Other event listeners
+    cancelBtn.addEventListener('click', closeCamera);
+    captureBtn.addEventListener('click', captureImage);
+    // --- End Event Listeners ---
+}
+
+// Helper function to update button visual states
+function updateCameraButtonStates(frontBtn, rearBtn, activeMode) {
+    if (activeMode === 'user') {
+        frontBtn.style.backgroundColor = '#4CAF50'; // Highlight active button
+        frontBtn.style.color = 'white';
+        rearBtn.style.backgroundColor = 'transparent';
+        rearBtn.style.color = 'white';
+    } else { // 'environment' or default
+        rearBtn.style.backgroundColor = '#4CAF50';
+        rearBtn.style.color = 'white';
+        frontBtn.style.backgroundColor = 'transparent';
+        frontBtn.style.color = 'white';
+    }
+}
+
+// Helper function to restart the camera with a new preference
+async function restartCameraWithPreference(facingMode) {
+    // Stop any existing stream
+    if (cameraStream) {
+        const tracks = cameraStream.getTracks();
+        tracks.forEach(track => track.stop());
+    }
+    cameraStream = null;
+    videoElement.srcObject = null;
+    captureBtn.disabled = true; // Disable capture while restarting
+    captureSpinner.style.display = 'block'; // Show spinner
+    
+    // Attempt to get new stream
+    await openCameraWithMode(facingMode);
+}
+// --- End of updated initializeCameraUI function ---
+
+// Function to open the camera
+// --- Updated openCamera function to prefer the rear camera ---
+// Function to open the camera, preferring the environment (rear) camera
+// --- Updated openCamera function with preference handling ---
+// Function to open the camera based on stored/user preference
+async function openCamera() {
+    // Get the preferred camera mode from localStorage or default to 'environment'
+    const preferredMode = localStorage.getItem('nurvleCameraPreference') || 'environment';
+    await openCameraWithMode(preferredMode);
+}
+
+// Core function to open camera with a specific facingMode
+async function openCameraWithMode(facingMode) {
+    // Define base constraints
+    const baseConstraints = {
+        video: {
+            width: { ideal: 1280 },
+            height: { ideal: 720 }
+        }
+    };
+    
+    // Add facingMode constraint
+    if (facingMode === 'user' || facingMode === 'environment') {
+        baseConstraints.video.facingMode = { ideal: facingMode };
+    } // If facingMode is invalid or 'any', we rely on base constraints
+    
+    // Fallback: If specific camera fails, try default
+    const fallbackConstraints = {
+        video: { width: { ideal: 1280 }, height: { ideal: 720 } } // Basic constraints
+    };
+    
+    try {
+        console.log(`Attempting to access camera with facingMode: ${facingMode || 'default'}...`);
+        cameraStream = await navigator.mediaDevices.getUserMedia(baseConstraints);
+        console.log("Camera accessed successfully.");
+    } catch (primaryError) {
+        console.warn(`Could not access camera with facingMode '${facingMode}':`, primaryError);
+        try {
+            console.log("Attempting to access any available camera (fallback)...");
+            cameraStream = await navigator.mediaDevices.getUserMedia(fallbackConstraints);
+            console.log("Fallback camera accessed successfully.");
+            // If fallback works, we might want to inform the user or update the UI
+            // to reflect that the preferred camera wasn't available.
+        } catch (fallbackError) {
+            console.error("Error accessing any camera:", fallbackError);
+            closeCamera(); // Ensure UI is cleaned up
+            alert("Could not access the camera. Please ensure permissions are granted and a camera is available.");
+            return; // Exit the function if both attempts fail
+        }
+    }
+    
+    if (cameraStream) {
+        videoElement.srcObject = cameraStream;
+        // Enable capture button once stream is ready
+        videoElement.onloadedmetadata = () => {
+            captureBtn.disabled = false;
+            captureSpinner.style.display = 'none'; // Hide spinner when ready
+        };
+        cameraModal.style.display = 'flex';
+        capturedBlob = null; // Reset captured image
+        
+        // Reset viewfinder and controls if coming from confirmation
+        // (This part is handled by the initial setup in initializeCameraUI now,
+        // but kept for robustness if called directly)
+        if (viewfinder.querySelector('.confirmation-preview')) {
+            viewfinder.innerHTML = '';
+            viewfinder.appendChild(videoElement);
+            viewfinder.appendChild(captureSpinner);
+            // Re-add camera selection controls if needed, but they are now part of the main modal structure
+            // So we just need to ensure they are visible/updated
+            const camSelectContainer = document.querySelector('.camera-select-container');
+            if (camSelectContainer) camSelectContainer.style.display = 'flex';
+            controls.innerHTML = '';
+            controls.appendChild(captureBtn);
+            controls.appendChild(cancelBtn);
+            // Update button states based on the *actual* stream if possible, or keep the requested one
+            // For simplicity, we'll keep the UI reflecting the *requested* mode.
+            const tracks = cameraStream.getVideoTracks();
+            if (tracks.length > 0) {
+                const track = tracks[0];
+                const settings = track.getSettings();
+                const actualFacingMode = settings.facingMode;
+                const frontBtn = document.getElementById('front-cam-btn');
+                const rearBtn = document.getElementById('rear-cam-btn');
+                if (frontBtn && rearBtn) {
+                    // Update UI based on what was requested, or potentially the actual mode if you want
+                    // This simple version keeps it based on the request stored in localStorage
+                    const storedPref = localStorage.getItem('nurvleCameraPreference') || 'environment';
+                    updateCameraButtonStates(frontBtn, rearBtn, storedPref);
+                }
+            }
+        }
+    }
+}
+// --- End of updated openCamera function ---
+// --- End of updated openCamera function ---
+
+// Function to close the camera and clean up
+function closeCamera() {
+    cameraModal.style.display = 'none';
+    if (cameraStream) {
+        const tracks = cameraStream.getTracks();
+        tracks.forEach(track => track.stop());
+        cameraStream = null;
+    }
+    videoElement.srcObject = null;
+    capturedBlob = null;
+}
+
+// Function to capture the image
+async function captureImage() {
+    if (cameraStream) {
+        captureSpinner.style.display = 'block'; // Show spinner during capture
+        const canvas = document.createElement('canvas');
+        const videoTrack = cameraStream.getVideoTracks()[0];
+        const settings = videoTrack.getSettings();
+        canvas.width = settings.width;
+        canvas.height = settings.height;
+        const ctx = canvas.getContext('2d');
+        ctx.drawImage(videoElement, 0, 0, canvas.width, canvas.height);
+        canvas.toBlob(async (blob) => { // Make this callback async
+            captureSpinner.style.display = 'none'; // Hide spinner
+            if (blob) {
+                try {
+                    // --- Modified Logic Starts Here ---
+                    
+                    // 1. Create a File object from the blob
+                    const fileName = `camera_capture_${Date.now()}.jpg`;
+                    const capturedFile = new File([blob], fileName, { type: 'image/jpeg' });
+                    
+                    // 2. Prepare fileInfo object (similar to file attachment)
+                    // Use the same structure as files added via file input
+                    const fileInfo = {
+                        file: capturedFile, // The actual File object
+                        id: `temp_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`, // Temporary ID for UI
+                        name: capturedFile.name,
+                        type: capturedFile.type,
+                        size: capturedFile.size,
+                        fileId: null // Will be populated after successful upload
+                    };
+                    
+                    // 3. Add to selectedFiles array (global array)
+                    selectedFiles.push(fileInfo);
+                    
+                    // 4. Update the preview container UI
+                    updatePreview(); // This function already handles displaying items from selectedFiles
+                    
+                    // 5. Close the camera modal
+                    closeCamera();
+                    
+                    // 6. Enable the send button if necessary
+                    const sendBtn = document.getElementById('sendBtn');
+                    const userInput = document.getElementById('userInput');
+                    if (sendBtn) {
+                        sendBtn.disabled = userInput.value.trim() === '' && selectedFiles.length === 0;
+                    }
+                    
+                    
+                    // --- Modified Logic Ends Here ---
+                } catch (error) {
+                    console.error("Error processing captured image:", error);
+                    alert("Failed to process the captured image. Please try again.");
+                    closeCamera(); // Ensure camera closes even on error
+                }
+            } else {
+                console.error("Failed to capture image blob.");
+                alert("Failed to capture the image. Please try again.");
+                closeCamera(); // Ensure camera closes even on failure
+            }
+        }, 'image/jpeg', 0.9); // JPEG quality 90%
+    }
+}
+
+// Function to show confirmation preview
+function showConfirmationPreview(blob) {
+    // Clear the viewfinder content
+    viewfinder.innerHTML = '';
+    const imgPreview = document.createElement('img');
+    imgPreview.src = URL.createObjectURL(blob);
+    imgPreview.className = 'confirmation-preview';
+    viewfinder.appendChild(imgPreview);
+
+    // Modify controls for confirmation
+    controls.innerHTML = ''; // Clear previous buttons
+
+    const confirmBtn = document.createElement('button');
+    confirmBtn.className = 'camera-btn camera-capture-btn'; // Reuse style
+    confirmBtn.innerHTML = '<i class="fas fa-check"></i> Send'; // Confirm/Send button
+
+    const retakeBtn = document.createElement('button');
+    retakeBtn.className = 'camera-btn camera-cancel-btn'; // Reuse style
+    retakeBtn.innerHTML = '<i class="fas fa-redo"></i> Retake'; // Retake button
+
+    confirmBtn.addEventListener('click', () => {
+        if (capturedBlob) {
+             // Create a File object from the blob
+            const fileName = `camera_capture_${Date.now()}.jpg`;
+            const capturedFile = new File([capturedBlob], fileName, { type: 'image/jpeg' });
+
+            // Prepare fileInfo object similar to file attachment
+            const fileInfo = {
+                file: capturedFile, // The actual File object
+                id: `temp_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`, // Temporary ID for UI
+                name: capturedFile.name,
+                type: capturedFile.type,
+                size: capturedFile.size,
+                fileId: null // Will be populated after successful upload
+            };
+
+            // Add to selectedFiles array
+            selectedFiles.push(fileInfo);
+
+            // Update UI preview
+            updatePreview();
+
+            // Close camera modal
+            closeCamera();
+
+            // Trigger send message with the captured image
+            const sendBtn = document.getElementById('sendBtn');
+            const userInput = document.getElementById('userInput');
+            // Ensure send button is enabled if it was disabled
+            sendBtn.disabled = userInput.value.trim() === '' && selectedFiles.length === 0;
+            // If files are present, send automatically
+             if (selectedFiles.length > 0) {
+                  sendMessage(); // This will now send the message with the captured image
+             }
+        }
+    });
+    retakeBtn.addEventListener('click', () => {
+        // Re-open the camera stream
+        openCamera(); // This will reset the viewfinder and controls
+    });
+    controls.appendChild(confirmBtn);
+    controls.appendChild(retakeBtn);
+}
+// --- End Camera Capture Logic ---
+// Add this function to handle paste events
+function handlePasteEvent(e) {
+    if (e.clipboardData && e.clipboardData.items) {
+        const items = e.clipboardData.items;
+        
+        for (let i = 0; i < items.length; i++) {
+            if (items[i].type.indexOf('image') !== -1) {
+                const blob = items[i].getAsFile();
+                const fileName = `pasted_image_${Date.now()}.png`;
+                
+                // Create a File object from the blob
+                const pastedFile = new File([blob], fileName, { type: 'image/png' });
+                
+                // Prepare fileInfo object
+                const fileInfo = {
+                    file: pastedFile,
+                    id: `temp_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`,
+                    name: pastedFile.name,
+                    type: pastedFile.type,
+                    size: pastedFile.size,
+                    fileId: null
+                };
+                
+                // Add to selectedFiles array
+                selectedFiles.push(fileInfo);
+                
+                // Update the preview container UI
+                updatePreview();
+                
+                // Enable send button if needed
+                const sendBtn = document.getElementById('sendBtn');
+                const userInput = document.getElementById('userInput');
+                if (sendBtn) {
+                    sendBtn.disabled = userInput.value.trim() === '' && selectedFiles.length === 0;
+                }
+                
+                // Prevent default paste behavior
+                e.preventDefault();
+                break;
+            }
+        }
+    }
+}
+</script>
+</body>
+</html>
