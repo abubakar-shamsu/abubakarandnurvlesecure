@@ -1300,8 +1300,6 @@ cursor: -webkit-grab;
     </div>
 </div>
     <script>
-    
-    const currentModel = "gemini-1.5-flash";
 async function loadConfig() {
   const resp = await fetch("/.netlify/functions/config");
   const config = await resp.json();
@@ -1366,12 +1364,6 @@ async function handleAnonymousLogin() {
 }
 
 
-
-
-//const API_KEY = 'AIzaSyB_s-KicZoL9Z-3YT9Wr7PfsUU8inKGYSI';
-//const API_KEY = 'AIzaSyDSIbWw73tIqNFS1c1mQEoiwgRaAlHaoA0'; // <-- Ensure this is valid
-//let currentModel = 'gemini-1.5-flash';
-const API_KEY = "";
 
 let isThinking = false;
 let isSearching = false; // New flag for search state
